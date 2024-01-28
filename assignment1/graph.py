@@ -1,6 +1,7 @@
 # Graph Implementation
 
 import math
+from queue import PriorityQueue
 
 """
 Vertex class represents a vertex in a graph
@@ -44,7 +45,7 @@ class Graph:
         """
         Graph class constructor to create new instances of Graph class/object
         """
-        self.vertices = []
+        self.vertices = {}
 
     def add_edge(self, vertexA, vertexB):
         """
@@ -62,35 +63,7 @@ class Graph:
 
         :param vertex     the vertex being added to the graph
         """
-        self.vertices.append(vertex)
-
-    def get_neighbors(self, vertex, number):
-        """
-        Find and return all neighbors of a vertex within the Euclidean distance
-
-        :param vertex       a vertex to get its neighbors
-        :param number       the number of neighbors to find/get
-
-        :return integer     the distance between the two vertices
-        """
-
-        neighbor_dists = []
-
-        for v in self.vertices:
-            if v != vertex:
-                neighbor_dists.append([v,math.dist(vertex.coords, v.coords)])
-
-        neighbor_dists.sort(key=lambda item:item[1])
-
-        neighbors = []
-
-        for neighbor,dist in neighbor_dists:
-            neighbors.append(neighbor)
-            if len(neighbors) >= number:
-                break
-
-        return neighbors
-
+        self.vertices[vertex.id] = vertex
 
     def has_edge(self, vertexA, vertexB):
         """
