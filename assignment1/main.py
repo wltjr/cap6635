@@ -8,9 +8,9 @@ image_file = "graph.jpg"
 
 # bounds for the graph image
 x_lower = 0
-x_upper = 1024
+x_upper = 1536
 y_lower = 0
-y_upper = 1024
+y_upper = 1536
 
 # dimensions of graph image
 width = x_upper - x_lower
@@ -43,8 +43,12 @@ with open("coords.txt", "r") as file_coords:
         x2 = int(vertex.coords[0]) + node_radius
         y2 = int(vertex.coords[1]) + node_radius
         draw.ellipse((x1, y1, x2, y2), purple)
-        draw.text((int(vertex.coords[0]) - node_radius/4, int(vertex.coords[1]) - node_radius/2),
-                  str(vertex.id), font=font)
+        if vertex.id < 10:
+            draw.text((int(vertex.coords[0]) - node_radius/4, int(vertex.coords[1]) - node_radius/2),
+                    str(vertex.id), font=font)
+        else :
+            draw.text((int(vertex.coords[0]) - node_radius/2, int(vertex.coords[1]) - node_radius/2),
+                    str(vertex.id), font=font)
 
 # read graph edges
 with open("graph.txt", "r") as file_graph:
