@@ -14,13 +14,17 @@ class Vertex:
 
         :param id           the integer id of the vertex
         :param coords       the 2D integer coordinates of the vertex
+        :param cost         the cost to goal, typically euclidean
         :param edges        list of neighbor vertices with a connection/edge
         :param parent       parent vertex as part of a path
+        :param parent       path to goal
         """
         self.id = id
         self.coords = coords
+        self.cost = None
         self.edges = []
         self.parent = None
+        self.path = []
 
     def __eq__(self, coords):
         """
@@ -31,6 +35,16 @@ class Vertex:
         :return boolean     true if the coordinates are the same, false otherwise
         """
         return self.coords == coords
+
+    def __lt__(self, vertex):
+        """
+        Check equality of vertex based on cost, override default comparison
+
+        :param vertex       the vertex to compare costs
+
+        :return boolean     true if the costs are the same, false otherwise
+        """
+        return (self.cost < vertex.cost)
 
     def __hash__(self):
         return hash((self.coords[0], self.coords[1]))
@@ -75,6 +89,35 @@ class Graph:
         :return boolean     true if each vertex has an edge to the other vertex, false otherwise
         """
         return vertexA in vertexB.edges and vertexB in vertexA.edges
+
+    def aStar(self, start, goal):
+        """
+        Obtain the path from start vertex to goal vertex using A* search algorithm
+
+        :param start          the starting vertex
+        :param goal           the goal vertex
+
+        :return list    list of vertex ids representing path from start to goal
+        """
+        frontier = PriorityQueue()
+        explored = set()
+        start.cost = math.dist(start.coords, goal.coords)
+        start.path = [start.id] 
+        frontier.put(start, 0)
+        cost = 0
+        while True:
+            node = frontier.get()
+            if node.coords == goal.coords:
+                return node.path
+            if node.coords not in explored:
+                explored.add(node.coords)
+                for neighbor in node.edges:
+                    nodePath = node.path + [neighbor.id]
+                    priority = cost + math.dist(node.coords, neighbor.coords)
+                    if neighbor.coords not in explored:
+                        neighbor.cost = math.dist(goal.coords, neighbor.coords)
+                        neighbor.path = nodePath
+                        frontier.put(neighbor, priority)
 
     def dijkstra(self, start, goal):
         dist = {}
