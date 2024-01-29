@@ -27,6 +27,7 @@ purple = (153, 119, 187)
 
 # create empty PIL image to draw on in memory, image saved at end
 image = Image.new("RGBA", (width, height), (255, 0, 0, 0))
+lines = Image.new("RGB", (width, height), black)
 draw = ImageDraw.Draw(image)
 font = ImageFont.truetype("arial.ttf", node_radius)
 
@@ -52,7 +53,6 @@ with open("coords.txt", "r") as file_coords:
 
 # read graph edges
 with open("graph.txt", "r") as file_graph:
-    lines = Image.new("RGB", (width, height), black)
     for line in file_graph :
         ids =  [float(i) for i in line.split()]
         ids_len = len(ids)
@@ -69,11 +69,21 @@ with open("graph.txt", "r") as file_graph:
                 ImageDraw.Draw(lines).line([vertex.coords, neighbor.coords], gray, width=4)
 
     file_graph.close()
-    lines.paste(image, (0, 0), image)
-    image = lines
+
+# get A* path from start to goal
+path = graph.aStar(graph.vertices[3], graph.vertices[13])
+path_len = len(path) - 1
+print("A* path: %s" % path)
+for i in range(0, path_len):
+    ImageDraw.Draw(lines).line([graph.vertices[path[i]].coords,
+                                graph.vertices[path[i+1]].coords], pink, width=4)
+
+# paste transparent vertices with ids over lines
+lines.paste(image, (0, 0), image)
+image = lines
 
 # scale down to reduce pixelation
 image = image.resize((width // 2, height // 2), resample=Image.LANCZOS)
 image.save(image_file)
 
-print("Graphs image written to: %s" % image_file)
+print("Graph image written to: %s" % image_file)
