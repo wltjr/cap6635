@@ -26,7 +26,7 @@ pink = (255, 105, 180)
 purple = (153, 119, 187)
 
 # create empty PIL image to draw on in memory, image saved at end
-image = Image.new("RGB", (width, height), black)
+image = Image.new("RGBA", (width, height), (255, 0, 0, 0))
 draw = ImageDraw.Draw(image)
 font = ImageFont.truetype("arial.ttf", node_radius)
 
@@ -52,6 +52,7 @@ with open("coords.txt", "r") as file_coords:
 
 # read graph edges
 with open("graph.txt", "r") as file_graph:
+    lines = Image.new("RGB", (width, height), black)
     for line in file_graph :
         ids =  [float(i) for i in line.split()]
         ids_len = len(ids)
@@ -65,9 +66,11 @@ with open("graph.txt", "r") as file_graph:
             if not graph.has_edge(vertex, neighbor) :
                 print("adding edge from %d to %d" % (my_id , ids[i]))
                 graph.add_edge(vertex, neighbor)
-                draw.line([vertex.coords, neighbor.coords], gray, width=2)
+                ImageDraw.Draw(lines).line([vertex.coords, neighbor.coords], gray, width=4)
 
     file_graph.close()
+    lines.paste(image, (0, 0), image)
+    image = lines
 
 # scale down to reduce pixelation
 image = image.resize((width // 2, height // 2), resample=Image.LANCZOS)
