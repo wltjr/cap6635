@@ -3,8 +3,9 @@
 import os
 from graph import Graph,Vertex
 from PIL import Image, ImageDraw, ImageFont, ImageTk
-from tkinter import BOTH, Button, Entry, Frame, Label, LEFT, RIGHT, Tk
+from tkinter import BOTH, Button, Entry, Frame, IntVar, Label, LEFT, RIGHT, Tk
 from tkinter import filedialog as fd
+from tkinter.ttk import Combobox
 
 class ui:
     """
@@ -25,9 +26,7 @@ class ui:
     def createGraph(self, master):
         """
         Open file selection dialog
-
         """
-
         graph = Graph()
         image_file = "graph.jpg"
 
@@ -90,7 +89,8 @@ class ui:
             file_graph.close()
 
         # get A* path from start to goal
-        path = graph.aStar(graph.vertices[3], graph.vertices[13])
+        path = graph.aStar(graph.vertices[self.cb_start.current()],
+                           graph.vertices[self.cb_goal.current()])
         path_len = len(path) - 1
         print("A* path: %s" % path)
         for i in range(0, path_len):
@@ -160,6 +160,8 @@ class ui:
         """
         Reset form fields
         """
+        self.cb_goal.set("")
+        self.cb_start.set("")
         self.setEntry(self.entry_coords, self.default_coord_filename) 
         self.setEntry(self.entry_graph, self.default_graph_filename)
         if self.label_graph:
@@ -182,22 +184,32 @@ class ui:
         frame_input.pack()
 
         title = "Coordinates"
-        Label(frame_input,text=title + " File").grid(row=0,column=0)
+        Label(frame_input,text=title + " File").grid(row=0, column=0, padx=5, pady=5)
         self.entry_coords = Entry(frame_input)
-        self.entry_coords.grid(row=0,column=1)
+        self.entry_coords.grid(row=0, column=1, padx=5, pady=5)
 
         func  = lambda: self.openCoordsFileCallback(title)
         open_file = Button(frame_input, text='Select File', command=func)
-        open_file.grid(row=0,column=2)
+        open_file.grid(row=0, column=2, padx=5, pady=5)
+
+        Label(frame_input,text="Start").grid(row=0, column=3, padx=5, pady=5)
+        selected_start = IntVar()
+        self.cb_start = Combobox(frame_input, textvariable=selected_start)
+        self.cb_start.grid(row=0, column=4, padx=5, pady=5)
 
         title = "Adjacency"
-        Label(frame_input,text=title + " File").grid(row=1,column=0)
+        Label(frame_input,text=title + " File").grid(row=1, column=0, padx=5, pady=5)
         self.entry_graph = Entry(frame_input)
-        self.entry_graph.grid(row=1,column=1)
+        self.entry_graph.grid(row=1, column=1, padx=5, pady=5)
 
         func  = lambda: self.openGraphFileCallback(title)
         open_file = Button(frame_input, text='Select File', command=func)
-        open_file.grid(row=1,column=2)
+        open_file.grid(row=1, column=2, padx=5, pady=5)
+
+        Label(frame_input,text="Goal").grid(row=1, column=3, padx=5, pady=5)
+        selected_goal = IntVar()
+        self.cb_goal = Combobox(frame_input, textvariable=selected_goal)
+        self.cb_goal.grid(row=1, column=4, padx=5, pady=5)
 
         # create graph button
         func  = lambda: self.createGraph(frame)
