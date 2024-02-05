@@ -5,6 +5,7 @@ from graph import Graph,Vertex
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 from tkinter import BOTH, Button, Entry, Frame, IntVar, Label, LEFT, RIGHT, Tk
 from tkinter import filedialog as fd
+from tkinter import messagebox as mb
 from tkinter.ttk import Combobox
 
 class ui:
@@ -23,10 +24,30 @@ class ui:
         self.root.eval('tk::PlaceWindow %s center' % self.root.winfo_pathname(self.root.winfo_id()))
 
 
-    def createGraph(self, master):
+    def createGraph(self, master, action = None):
         """
         Open file selection dialog
         """
+
+        # form validation
+        if action != None:
+            if self.cb_start['values'] == '' or self.cb_start['values'] == '':
+                mb.showerror("Missing Graph Attributes",
+                             "Please press the \"Create Graph\" button")
+                return
+            elif self.cb_start.get() == '':
+                mb.showerror("Missing Start Node/Vertex",
+                             "Please select a Start node/vertex")
+                return
+            elif self.cb_goal.get() == '':
+                mb.showerror("Missing Goal Node/Vertex",
+                             "Please select a Goal node/vertex")
+                return
+            elif self.cb_start.get() == self.cb_goal.get():
+                mb.showerror("Missing Path Goal is Start",
+                             "Please a different Start and Goal node/vertex")
+                return
+
         graph = Graph()
         image_file = "graph.jpg"
 
@@ -56,6 +77,9 @@ class ui:
                 vertex = Vertex(int(values[0]), (float(values[1]), float(values[2])))
                 # add to graph
                 graph.add_vertex(vertex)
+                # add to comboboxes
+                self.cb_goal['values'] = tuple(list(self.cb_goal['values']) + [vertex.id])
+                self.cb_start['values'] = tuple(list(self.cb_start['values']) + [vertex.id])
                 # draw node with id
                 x1 = int(vertex.coords[0]) - node_radius
                 y1 = int(vertex.coords[1]) - node_radius
@@ -88,14 +112,22 @@ class ui:
 
             file_graph.close()
 
-        # get A* path from start to goal
-        path = graph.aStar(graph.vertices[self.cb_start.current()],
-                           graph.vertices[self.cb_goal.current()])
-        path_len = len(path) - 1
-        print("A* path: %s" % path)
-        for i in range(0, path_len):
-            ImageDraw.Draw(lines).line([graph.vertices[path[i]].coords,
-                                        graph.vertices[path[i+1]].coords], pink, width=4)
+        path = None
+        if action == "A*":
+            # get A* path from start to goal
+            path = graph.aStar(graph.vertices[int(self.cb_start.get())],
+                               graph.vertices[int(self.cb_goal.get())])
+        elif action == "Dijkstra":
+            # get Dijkstra path from start to goal
+            path = graph.dijkstra(graph.vertices[int(self.cb_start.get())],
+                                  graph.vertices[int(self.cb_goal.get())])
+        if path:
+            path_len = len(path) - 1
+            print("%s path: %s" % (action, path))
+            for i in range(0, path_len):
+                ImageDraw.Draw(lines).line([graph.vertices[path[i]].coords,
+                                            graph.vertices[path[i+1]].coords], pink, width=4)
+            self.label_graph.destroy()
 
         # paste transparent vertices with ids over lines
         lines.paste(image, (0, 0), image)
@@ -212,9 +244,19 @@ class ui:
         self.cb_goal.grid(row=1, column=4, padx=5, pady=5)
 
         # create graph button
-        func  = lambda: self.createGraph(frame)
+        func  = lambda: self.createGraph(frame, None)
         btn_create_graph = Button(root, text='Create Graph', command=func)
         btn_create_graph.pack(side=LEFT, padx=5, pady=5)
+
+        # A* search button
+        func  = lambda: self.createGraph(frame, "A*")
+        btn_a_star = Button(root, text='A* Search', command=func)
+        btn_a_star.pack(side=LEFT, padx=5, pady=5)
+
+        # Dijkstra search button
+        func  = lambda: self.createGraph(frame, "Dijkstra")
+        btn_dijkstra = Button(root, text='Dijkstra', command=func)
+        btn_dijkstra.pack(side=LEFT, padx=5, pady=5)
 
         # quit button
         btn_quit = Button(root, text='Quit', command=root.quit)
