@@ -1,89 +1,223 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
+import os
 from graph import Graph,Vertex
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageTk
+from tkinter import BOTH, Button, Entry, Frame, Label, LEFT, RIGHT, Tk
+from tkinter import filedialog as fd
 
-graph = Graph()
-image_file = "graph.jpg"
+class ui:
+    """
+    User Interface class displays GUI for the project and is the main class
+    """
 
-# bounds for the graph image
-x_lower = 0
-x_upper = 1536
-y_lower = 0
-y_upper = 1536
+    default_coord_filename = "coords.txt"
+    default_graph_filename = "graph.txt"
+    label_graph = None
 
-# dimensions of graph image
-width = x_upper - x_lower
-height = y_upper - y_lower
-node_radius = 20
+    def centerWindow(self):
+        """
+        Center the window in screen
+        """
+        self.root.eval('tk::PlaceWindow %s center' % self.root.winfo_pathname(self.root.winfo_id()))
 
-# color constants for PIL
-gray = (100, 100, 100)
-black = (0, 0, 0)
-red = (255, 0, 0)
-green = (0,128,0)
-pink = (255, 105, 180)
-purple = (153, 119, 187)
 
-# create empty PIL image to draw on in memory, image saved at end
-image = Image.new("RGBA", (width, height), (255, 0, 0, 0))
-lines = Image.new("RGB", (width, height), black)
-draw = ImageDraw.Draw(image)
-font = ImageFont.truetype("arial.ttf", node_radius)
+    def createGraph(self, master):
+        """
+        Open file selection dialog
 
-# read coords and add vertices to graph
-with open("coords.txt", "r") as file_coords:
-    for line in file_coords :
-        values = line.split()
-        vertex = Vertex(int(values[0]), (float(values[1]), float(values[2])))
-        # add to graph
-        graph.add_vertex(vertex)
-        # draw node with id
-        x1 = int(vertex.coords[0]) - node_radius
-        y1 = int(vertex.coords[1]) - node_radius
-        x2 = int(vertex.coords[0]) + node_radius
-        y2 = int(vertex.coords[1]) + node_radius
-        draw.ellipse((x1, y1, x2, y2), purple)
-        if vertex.id < 10:
-            draw.text((int(vertex.coords[0]) - node_radius/4, int(vertex.coords[1]) - node_radius/2),
-                    str(vertex.id), font=font)
-        else :
-            draw.text((int(vertex.coords[0]) - node_radius/2, int(vertex.coords[1]) - node_radius/2),
-                    str(vertex.id), font=font)
+        """
 
-# read graph edges
-with open("graph.txt", "r") as file_graph:
-    for line in file_graph :
-        ids =  [float(i) for i in line.split()]
-        ids_len = len(ids)
-        # first id is me rest are my edges
-        my_id = int(ids[0])
-        vertex = graph.vertices[my_id]
+        graph = Graph()
+        image_file = "graph.jpg"
 
-        # go through remaining ids on line after the first
-        for i in range(1,ids_len):
-            neighbor = graph.vertices[ids[i]]
-            if not graph.has_edge(vertex, neighbor) :
-                print("adding edge from %d to %d" % (my_id , ids[i]))
-                graph.add_edge(vertex, neighbor)
-                ImageDraw.Draw(lines).line([vertex.coords, neighbor.coords], gray, width=4)
+        # dimensions of graph image
+        width = 1536
+        height = 1536
+        node_radius = 20
 
-    file_graph.close()
+        # color constants for PIL
+        gray = (100, 100, 100)
+        black = (0, 0, 0)
+        red = (255, 0, 0)
+        green = (0,128,0)
+        pink = (255, 105, 180)
+        purple = (153, 119, 187)
 
-# get A* path from start to goal
-path = graph.aStar(graph.vertices[3], graph.vertices[13])
-path_len = len(path) - 1
-print("A* path: %s" % path)
-for i in range(0, path_len):
-    ImageDraw.Draw(lines).line([graph.vertices[path[i]].coords,
-                                graph.vertices[path[i+1]].coords], pink, width=4)
+        # create empty PIL image to draw on in memory, image saved at end
+        image = Image.new("RGBA", (width, height), (255, 0, 0, 0))
+        lines = Image.new("RGB", (width, height), black)
+        draw = ImageDraw.Draw(image)
+        font = ImageFont.truetype("arial.ttf", node_radius)
 
-# paste transparent vertices with ids over lines
-lines.paste(image, (0, 0), image)
-image = lines
+        # read coords and add vertices to graph
+        with open(self.entry_coords.get(), "r") as file_coords:
+            for line in file_coords :
+                values = line.split()
+                vertex = Vertex(int(values[0]), (float(values[1]), float(values[2])))
+                # add to graph
+                graph.add_vertex(vertex)
+                # draw node with id
+                x1 = int(vertex.coords[0]) - node_radius
+                y1 = int(vertex.coords[1]) - node_radius
+                x2 = int(vertex.coords[0]) + node_radius
+                y2 = int(vertex.coords[1]) + node_radius
+                draw.ellipse((x1, y1, x2, y2), purple)
+                if vertex.id < 10:
+                    draw.text((int(vertex.coords[0]) - node_radius/4, int(vertex.coords[1]) - node_radius/2),
+                            str(vertex.id), font=font)
+                else :
+                    draw.text((int(vertex.coords[0]) - node_radius/2, int(vertex.coords[1]) - node_radius/2),
+                            str(vertex.id), font=font)
 
-# scale down to reduce pixelation
-image = image.resize((width // 2, height // 2), resample=Image.LANCZOS)
-image.save(image_file)
+        # read graph edges
+        with open(self.entry_graph.get(), "r") as file_graph:
+            for line in file_graph :
+                ids =  [float(i) for i in line.split()]
+                ids_len = len(ids)
+                # first id is me rest are my edges
+                my_id = int(ids[0])
+                vertex = graph.vertices[my_id]
 
-print("Graph image written to: %s" % image_file)
+                # go through remaining ids on line after the first
+                for i in range(1,ids_len):
+                    neighbor = graph.vertices[ids[i]]
+                    if not graph.has_edge(vertex, neighbor) :
+                        print("adding edge from %d to %d" % (my_id , ids[i]))
+                        graph.add_edge(vertex, neighbor)
+                        ImageDraw.Draw(lines).line([vertex.coords, neighbor.coords], gray, width=4)
+
+            file_graph.close()
+
+        # get A* path from start to goal
+        path = graph.aStar(graph.vertices[3], graph.vertices[13])
+        path_len = len(path) - 1
+        print("A* path: %s" % path)
+        for i in range(0, path_len):
+            ImageDraw.Draw(lines).line([graph.vertices[path[i]].coords,
+                                        graph.vertices[path[i+1]].coords], pink, width=4)
+
+        # paste transparent vertices with ids over lines
+        lines.paste(image, (0, 0), image)
+        image = lines
+
+        # scale down to reduce pixelation
+        image = image.resize((width // 2, height // 2), resample=Image.LANCZOS)
+        image.save(image_file)
+
+        print("Graph image written to: %s" % image_file)
+
+        tkImage = ImageTk.PhotoImage(image)
+        self.label_graph = Label(master, image = tkImage)
+        self.label_graph.image = tkImage
+        self.label_graph.pack(expand = True, fill = BOTH)
+        self.centerWindow()
+
+
+    def getFileName(self, title):
+        """
+        Open file selection dialog to select a file
+
+        :param title a title to be added to the dialog title
+        :return the base filename
+        """
+        filename = fd.askopenfilename(filetypes=[("Text files","*.txt")],
+                                      initialdir=".",
+                                      title=("Select " + title + " File"))
+
+        if filename == () or filename == "":
+            return
+
+        return os.path.basename(filename)
+
+
+    def setEntry(self, entry, text):
+        """
+        Clear and set new text for a entry field
+
+        :param entry tkinter entry widget object
+        :param text entry field text
+        """
+        entry.delete(0, 'end')
+        entry.insert(0, text)
+
+
+    def openCoordsFileCallback(self, title):
+        """
+        Coords file open callback method
+        """
+        self.setEntry(self.entry_coords, self.getFileName(title))
+
+
+    def openGraphFileCallback(self, title):
+        """
+        Graph file open callback method
+        """
+        self.setEntry(self.entry_graph, self.getFileName(title))
+
+
+    def reset(self):
+        """
+        Reset form fields
+        """
+        self.setEntry(self.entry_coords, self.default_coord_filename) 
+        self.setEntry(self.entry_graph, self.default_graph_filename)
+        if self.label_graph:
+            self.label_graph.destroy()
+        self.centerWindow()
+
+
+    def run(self):
+        """
+        Run the GUI create the root window, frames, and all GUI widgets
+        """
+        root = Tk()
+        root.resizable(False, False)
+        root.title("Assignment 1 - A* shortest path graph search")
+
+        frame = Frame(root)
+        frame.pack()
+
+        frame_input = Frame(frame)
+        frame_input.pack()
+
+        title = "Coordinates"
+        Label(frame_input,text=title + " File").grid(row=0,column=0)
+        self.entry_coords = Entry(frame_input)
+        self.entry_coords.grid(row=0,column=1)
+
+        func  = lambda: self.openCoordsFileCallback(title)
+        open_file = Button(frame_input, text='Select File', command=func)
+        open_file.grid(row=0,column=2)
+
+        title = "Adjacency"
+        Label(frame_input,text=title + " File").grid(row=1,column=0)
+        self.entry_graph = Entry(frame_input)
+        self.entry_graph.grid(row=1,column=1)
+
+        func  = lambda: self.openGraphFileCallback(title)
+        open_file = Button(frame_input, text='Select File', command=func)
+        open_file.grid(row=1,column=2)
+
+        # create graph button
+        func  = lambda: self.createGraph(frame)
+        btn_create_graph = Button(root, text='Create Graph', command=func)
+        btn_create_graph.pack(side=LEFT, padx=5, pady=5)
+
+        # quit button
+        btn_quit = Button(root, text='Quit', command=root.quit)
+        btn_quit.pack(side=RIGHT, padx=5, pady=5)
+
+        # reset button
+        btn_reset = Button(root, text='Reset', command=self.reset)
+        btn_reset.pack(side=RIGHT, padx=5, pady=5)
+
+        self.root = root
+        self.reset()
+        root.mainloop()
+
+
+if __name__ == '__main__':
+    ui = ui()
+    ui.run()
+
