@@ -105,7 +105,7 @@ class Graph:
         start.path = [start.id] 
         frontier.put(start, 0)
         cost = 0
-        while True:
+        while not frontier.empty():
             node = frontier.get()
             if node.coords == goal.coords:
                 return node.path
@@ -118,6 +118,7 @@ class Graph:
                         neighbor.cost = math.dist(goal.coords, neighbor.coords)
                         neighbor.path = nodePath
                         frontier.put(neighbor, priority)
+        return None
 
     def dijkstra(self, start, goal):
         dist = {}
