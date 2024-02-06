@@ -59,8 +59,6 @@ class ui:
         # color constants for PIL
         gray = (100, 100, 100)
         black = (0, 0, 0)
-        red = (255, 0, 0)
-        green = (0,128,0)
         pink = (255, 105, 180)
         purple = (153, 119, 187)
 
@@ -106,7 +104,6 @@ class ui:
                 for i in range(1,ids_len):
                     neighbor = graph.vertices[ids[i]]
                     if not graph.has_edge(vertex, neighbor) :
-                        print("adding edge from %d to %d" % (my_id , ids[i]))
                         graph.add_edge(vertex, neighbor)
                         ImageDraw.Draw(lines).line([vertex.coords, neighbor.coords], gray, width=4)
 
