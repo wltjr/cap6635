@@ -3,7 +3,7 @@
 import os
 from graph import Graph,Vertex
 from PIL import Image, ImageDraw, ImageFont, ImageTk
-from tkinter import BOTH, Button, Entry, Frame, IntVar, Label, LEFT, RIGHT, Tk
+from tkinter import BOTH, Button, Entry, EW, Frame, IntVar, Label, LEFT, RIGHT, Tk
 from tkinter import filedialog as fd
 from tkinter import messagebox as mb
 from tkinter.ttk import Combobox
@@ -111,6 +111,20 @@ class ui:
                         ImageDraw.Draw(lines).line([vertex.coords, neighbor.coords], gray, width=4)
 
             file_graph.close()
+
+        blocked = set(self.blocked.get().split())
+        for block in blocked:
+            graph.remove_vertex(graph.vertices[int(block)])
+
+        # validate blocked entry
+        if self.cb_start.get() in blocked:
+            mb.showerror("Blocked Start Node/Vertex",
+                         "Please remove the start node/vertex id from blocked field")
+            return
+        elif self.cb_goal.get() in blocked:
+            mb.showerror("Blocked Goal Node/Vertex",
+                         "Please remove the goal node/vertex id from blocked field")
+            return
 
         path = None
         if action == "A*":
@@ -242,6 +256,10 @@ class ui:
         selected_goal = IntVar()
         self.cb_goal = Combobox(frame_input, textvariable=selected_goal)
         self.cb_goal.grid(row=1, column=4, padx=5, pady=5)
+
+        Label(frame_input,text="Blocked Node(s)").grid(row=2, column=0, padx=5, pady=5)
+        self.blocked = Entry(frame_input)
+        self.blocked.grid(row=2, column=1, columnspan=4, padx=5, pady=5, sticky=EW)
 
         # create graph button
         func  = lambda: self.createGraph(frame, None)
