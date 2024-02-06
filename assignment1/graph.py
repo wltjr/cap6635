@@ -122,7 +122,7 @@ class Graph:
     def dijkstra(self, start, goal):
         dist = {}
 
-        for vertex in self.vertices:
+        for id,vertex in self.vertices.items():
             dist[vertex] = 1000000
             vertex.parent = None
         dist[start] = 0
@@ -144,10 +144,10 @@ class Graph:
         path_stack = []
 
         while vertex != start and vertex != None:
-            path_stack.append(vertex)
+            path_stack.append(vertex.id)
             vertex = vertex.parent
 
-        path_stack.append(start)
+        path_stack.append(start.id)
 
         return path_stack
 
