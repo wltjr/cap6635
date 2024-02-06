@@ -160,3 +160,17 @@ class Graph:
         """
         vertexA.edges.remove(vertexB)
         vertexB.edges.remove(vertexA)
+
+    def remove_vertex(self, vertex):
+        """
+        Remove an vertex from the graph
+
+        :param id           the ID of a vertex to remove
+        """
+        for id, v in self.vertices.items():
+            if v != vertex and vertex in v.edges:
+                self.remove_edge(v, vertex)
+
+        # remove vertex from graph
+        self.vertices.pop(vertex.id, None)
+
