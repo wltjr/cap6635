@@ -21,7 +21,7 @@ class Vertex:
         """
         self.id = id
         self.coords = coords
-        self.cost = None
+        self.cost = 0
         self.edges = []
         self.parent = None
         self.path = []
@@ -101,23 +101,21 @@ class Graph:
         """
         frontier = PriorityQueue()
         explored = set()
-        start.cost = math.dist(start.coords, goal.coords)
         start.path = [start.id] 
-        frontier.put(start, 0)
-        cost = 0
+        frontier.put((0, start))
         while not frontier.empty():
-            node = frontier.get()
-            if node.coords == goal.coords:
+            node = frontier.get()[1]
+            if node.id == goal.id:
                 return node.path
-            if node.coords not in explored:
-                explored.add(node.coords)
+            if node.id not in explored:
+                explored.add(node.id)
                 for neighbor in node.edges:
-                    nodePath = node.path + [neighbor.id]
-                    priority = cost + math.dist(node.coords, neighbor.coords)
-                    if neighbor.coords not in explored:
-                        neighbor.cost = math.dist(goal.coords, neighbor.coords)
-                        neighbor.path = nodePath
-                        frontier.put(neighbor, priority)
+                    neighbor.path = node.path + [neighbor.id]
+                    cost = sum(self.vertices[id].cost for id in neighbor.path)
+                    neighbor.cost = cost + math.dist(node.coords, neighbor.coords)
+                    priority = neighbor.cost + math.dist(neighbor.coords, goal.coords)
+                    if neighbor.id not in explored:
+                        frontier.put((priority, neighbor))
         return None
 
     def dijkstra(self, start, goal):
