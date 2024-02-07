@@ -132,6 +132,12 @@ class ui:
             # get Dijkstra path from start to goal
             path = graph.dijkstra(graph.vertices[int(self.cb_start.get())],
                                   graph.vertices[int(self.cb_goal.get())])
+
+        if action != None and path == None:
+            mb.showerror("Path Not Found",
+                         "A path from start node/vertex to goal node/vertex could not be found")
+            return
+
         if path:
             path_len = len(path) - 1
             print("%s path: %s" % (action, path))
