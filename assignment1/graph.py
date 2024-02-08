@@ -120,7 +120,6 @@ class Graph:
 
     def dijkstra(self, start, goal):
         dist = {}
-
         for id,vertex in self.vertices.items():
             dist[vertex] = 1000000
             vertex.parent = None
@@ -128,25 +127,23 @@ class Graph:
 
         while not dist == False:
             vertex = min(dist, key=dist.get)
-
             if vertex == goal:
                 break
-
             for neighbor in vertex.edges:
                 alt = dist[vertex] + math.dist(vertex.coords, neighbor.coords)
                 if dist.get(neighbor) != None and alt < dist[neighbor]:
                     dist[neighbor] = alt
                     neighbor.parent = vertex
-
             del dist[vertex]
 
         path_stack = []
-
         while vertex != start and vertex != None:
             path_stack.append(vertex.id)
             vertex = vertex.parent
-
         path_stack.append(start.id)
+        path_stack.reverse()
+        if not self.has_edge(start, self.vertices[path_stack[1]]):
+            return None
 
         return path_stack
 
