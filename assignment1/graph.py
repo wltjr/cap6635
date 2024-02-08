@@ -104,15 +104,15 @@ class Graph:
         start.path = [start.id] 
         frontier.put((0, start))
         while not frontier.empty():
-            node = frontier.get()[1]
-            if node.id == goal.id:
-                return node.path
-            if node.id not in explored:
-                explored.add(node.id)
-                for neighbor in node.edges:
-                    neighbor.path = node.path + [neighbor.id]
+            vertex = frontier.get()[1]
+            if vertex.id == goal.id:
+                return vertex.path
+            if vertex.id not in explored:
+                explored.add(vertex.id)
+                for neighbor in vertex.edges:
+                    neighbor.path = vertex.path + [neighbor.id]
                     cost = sum(self.vertices[id].cost for id in neighbor.path)
-                    neighbor.cost = cost + math.dist(node.coords, neighbor.coords)
+                    neighbor.cost = cost + math.dist(vertex.coords, neighbor.coords)
                     priority = neighbor.cost + math.dist(neighbor.coords, goal.coords)
                     if neighbor.id not in explored:
                         frontier.put((priority, neighbor))
