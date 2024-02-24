@@ -11,7 +11,7 @@ range_min = -2
 range_max = 25
 
 radius_min = 0.5
-radius_max = 1
+radius_max = 2
 
 def main():
 
