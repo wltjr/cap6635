@@ -113,7 +113,7 @@ def simulated_annealing(problem):
         if accept(T, deltaE):
             solution = newSolution
             E = newE
-        T /= alpha # cool the temp
+        T *= alpha # cool the temp
 
     return solution
 
