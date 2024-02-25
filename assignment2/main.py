@@ -22,15 +22,43 @@ def accept(T, deltaE):
             return False
 
 
-def generate(current):
+def generate(solution):
     """
     Generate a new solution from the current
 
-    :param current      2D list containing the current solution
+    :param solution     2D list containing the current solution
 
     :return list        2D list containing a new random solution from current
     """
-    solution = current
+    dim = len(solution)
+    x = random.randrange(0, dim)
+    y = random.randrange(0, dim)
+
+    # reduce for zero index
+    dim -= 1
+
+    # random action: up 0, down 1, left 2, right 3
+    action = random.randrange(0, 4)
+
+    # move up, if action up and y > 0, or if action down and y == dim
+    if (action == 0 and y > 0) or \
+       (action == 1 and y == dim):
+        solution[y][x], solution[y - 1][x] = solution[y - 1][x], solution[y][x]
+
+    # move down, if action down and y < dim, or if action up and y == 0
+    elif (action == 1 and y < dim) or \
+         (action == 0 and y == 0):
+        solution[y][x], solution[y + 1][x] = solution[y + 1][x], solution[y][x]
+
+    # move left, if action left and x > 0, or if action right and x == dim
+    elif (action == 2 and x > 0) or \
+         (action == 3 and x == dim):
+        solution[y][x], solution[y][x - 1] = solution[y][x - 1], solution[y][x]
+
+    # move right, if action right and x < dim, or if action left and x == 0
+    elif (action == 3 and x < dim) or \
+         (action == 2 and x == 0):
+        solution[y][x], solution[y][x + 1] = solution[y][x + 1], solution[y][x]
 
     return solution
 
@@ -67,7 +95,6 @@ def score(solution):
     for x in range(dim):
         for y in range(dim):
             x2, y2 = valueToCoords(solution[y][x], dim)
-            print("value %d col/x = %d row/y = %d" % (solution[y][x], x2, y2))
             _score += abs(x - x2) + abs(y - y2)
 
     return _score
@@ -79,9 +106,9 @@ def simulated_annealing(problem):
     alpha = 0.84        # cooling
     solution = generate(problem)
     E = score(solution)
-    while T > 0:
+    while T > 0 and E > 0:
         newSolution = generate(solution)
-        newE = score()
+        newE = score(newSolution)
         deltaE = newE - E
         if accept(T, deltaE):
             solution = newSolution
@@ -103,6 +130,12 @@ def main():
     print("Please enter the start case state: ")
     for i in range(grid_size):
         grid.append([int(x) for x in input().split()])
+
+    print(grid)
+
+    print(score(grid))
+
+    grid = generate(grid)
 
     print(grid)
 
