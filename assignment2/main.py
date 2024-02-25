@@ -91,11 +91,15 @@ def score(solution):
     :return int         integer score value of the solution
     """
     _score = 0
+    correct = 0
     dim = len(solution)
     for x in range(dim):
         for y in range(dim):
             x2, y2 = valueToCoords(solution[y][x], dim)
             _score += abs(x - x2) + abs(y - y2)
+            if solution[y][x] != correct:
+                _score += 1
+            correct += 1
 
     return _score
 
