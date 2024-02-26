@@ -111,8 +111,8 @@ def score(solution):
 
 def simulated_annealing(problem):
 
-    T = 10              # temperature
-    alpha = 0.84        # cooling
+    T = 1000000         # temperature
+    alpha = 0.95        # cooling
     steps = 1
     solution = generate(problem)
     E = score(solution)
