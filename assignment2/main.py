@@ -132,16 +132,18 @@ def simulated_annealing(problem):
 
 def main():
 
-    grid_size = 3
     grid = []
+    dim = 0
     n = 0
 
     while n < 8 or n > 100:
         print("Please enter a value for N (8 <= N <= 100): ")
         n = int(input())
 
+    dim = math.ceil(math.sqrt(n + 1))
+
     print("Please enter the start case state: ")
-    for i in range(grid_size):
+    for i in range(dim):
         grid.append([int(x) for x in input().split()])
 
     print(grid)
