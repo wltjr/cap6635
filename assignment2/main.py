@@ -113,6 +113,7 @@ def simulated_annealing(problem):
 
     T = 10              # temperature
     alpha = 0.84        # cooling
+    steps = 1
     solution = generate(problem)
     E = score(solution)
     while T > 0.0001 and E > 0:
@@ -123,6 +124,9 @@ def simulated_annealing(problem):
             solution = newSolution
             E = newE
         T *= alpha # cool the temp
+        steps += 1
+
+    print("steps %d" % steps)
 
     return solution
 
