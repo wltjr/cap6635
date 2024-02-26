@@ -146,10 +146,6 @@ def main():
     for i in range(dim):
         grid.append([int(x) for x in input().split()])
 
-    print(grid)
-
-    print(score(grid))
-
     start = timeit.default_timer()
     grid = simulated_annealing(grid)
     stop = timeit.default_timer()
