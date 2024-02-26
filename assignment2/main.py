@@ -114,7 +114,7 @@ def simulated_annealing(problem):
     alpha = 0.84        # cooling
     solution = generate(problem)
     E = score(solution)
-    while T > 0 and E > 0:
+    while T > 0.0001 and E > 0:
         newSolution = generate(solution)
         newE = score(newSolution)
         deltaE = newE - E
