@@ -2,6 +2,7 @@
 
 import math
 import random
+import timeit
 
 def accept(T, deltaE):
     """
@@ -143,11 +144,12 @@ def main():
 
     print(score(grid))
 
-    grid = generate(grid)
-
+    start = timeit.default_timer()
+    grid = simulated_annealing(grid)
+    stop = timeit.default_timer()
+    print('Time: ', stop - start)
     print(grid)
 
-    print(score(grid))
 
 
 if __name__ == '__main__':
