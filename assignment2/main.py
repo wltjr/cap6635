@@ -110,7 +110,13 @@ def score(solution):
 
 
 def simulated_annealing(problem):
+    """
+    Simulated Annealing algorithm to find goal state
 
+    :param problem      2D list containing the problem start state
+
+    :return list        2D list containing the algorithm solution, goal state
+    """
     T = 1000000         # temperature
     alpha = 0.95        # cooling
     steps = 1
