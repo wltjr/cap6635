@@ -31,8 +31,12 @@ def generate(solution):
     :return list        2D list containing a new random solution from current
     """
     dim = len(solution)
-    x = random.randrange(0, dim)
-    y = random.randrange(0, dim)
+    while True:
+        x = random.randrange(0, dim)
+        y = random.randrange(0, dim)
+
+        if solution[y][x] != (y * dim + x) :
+            break
 
     # reduce for zero index
     dim -= 1
