@@ -1,0 +1,44 @@
+\documentclass[12pt]{article}
+    \title{\vspace{-50pt}\textbf{\underline{CAP6635 Assignment 2 - Problem 1}}}
+    \author{William L. Thomson Jr.}
+    \date{Spring Semester 2024}
+
+    \addtolength{\topmargin}{-3cm}
+    \addtolength{\textheight}{3cm}
+    
+    \usepackage{enumitem}
+\begin{document}
+
+\maketitle
+
+\begin{description}[itemsep=1em]
+	\item[What does a population represent in this case?] \hfill \break
+		All of the various puzzle states, every possible N-puzzle position, all puzzle state
+		position permutations, including goal state; An array or string of unique numbers
+		representing the value in each position \\
+		E.g. for 8-puzzle goal 012345678.
+
+	\item[What is your mutation function?] \hfill \break
+		A function that changes the various values representing the tile positions in any puzzle
+		state, choosing a random position to change, within the rules of the game. That would
+		entail replacing the new value with the old at what ever position the old was located,
+		as game rules would not allow for the same value in multiple locations, nor absence
+		of others. \\
+		E.g. for 8-puzzle 8765\underline{4}3210 $\rightarrow$ 4765\underline{8}3210
+
+	\item[How does crossover happen in this case?] \hfill \break
+		Cross over would need to take place based on the max/min amount of unique characters
+		in each puzzle state, as the crossover could not duplicate the values for any puzzle
+		state \\
+		E.g. for 8-puzzle \underline{012}345678 x 876543\underline{210} $\rightarrow$ \underline{210}345678 | 876543\underline{012}
+
+	\item[How do you evaluate the quality of a chromosome in this scenario?] \hfill
+		You would need some scoring mechanism to score the resulting game state, aka
+		chromosome, to determine which ones are of highest value, highest score, closest to
+		or the goal state. One method of scoring combines the number of correct puzzle
+		positions along with the Manhattan distance, with lower score being more desirable
+		and goal/stop at 0.
+
+\end{description}
+\end{document}
+
