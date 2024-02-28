@@ -124,8 +124,8 @@ def simulated_annealing(problem):
 
     :return list        2D list containing the algorithm solution, goal state
     """
-    T = 1000000         # temperature
-    alpha = 0.95        # cooling
+    T = 100000000000     # temperature
+    alpha = 0.999        # cooling
     steps = 1
     solution = generate(problem)
     E = score(solution)
