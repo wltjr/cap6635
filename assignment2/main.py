@@ -32,11 +32,13 @@ def generate(solution):
     :return list        2D list containing a new random solution from current
     """
     dim = len(solution)
+    dim_1 = dim - 1
     while True:
         x = random.randrange(0, dim)
         y = random.randrange(0, dim)
 
-        if solution[y][x] != (y * dim + x) :
+        if (y == dim_1 and x == dim_1 and solution[dim_1][dim_1] != 0) or \
+           (solution[y][x] - 1) != (y * dim + x):
             break
 
     # reduce for zero index
@@ -77,13 +79,16 @@ def valueToCoords(value, dim):
 
     :return int         column the value belongs to
     """
-    x = 0
+    if value == 0:
+        return (dim - 1, dim - 1)
+
+    x = -1
     for i in range(value):
         x += 1
         if x == dim:
             x = 0
 
-    y = math.floor(value / dim)
+    y = math.floor((value - 1) / dim)
 
     return (x, y)
 
@@ -98,11 +103,13 @@ def score(solution):
     _score = 0
     correct = 0
     dim = len(solution)
+    n = dim ** 2 - 1
     for y in range(dim):
         for x in range(dim):
             x2, y2 = valueToCoords(solution[y][x], dim)
             _score += abs(x - x2) + abs(y - y2)
-            if solution[y][x] != correct:
+            if (solution[y][x] == 0 and correct != n) and \
+               (solution[y][x] - 1) != correct:
                 _score += 1
             correct += 1
 
