@@ -159,7 +159,7 @@ def main():
     dim = math.ceil(math.sqrt(n + 1))
 
     # starting N-puzzle state
-    print("Please enter the start case state: ")
+    print("\nPlease enter the start case state: ")
     for i in range(dim):
         grid.append([int(x) for x in input().split()])
 
@@ -169,10 +169,11 @@ def main():
     stop = timeit.default_timer()
 
     # display results
-    print('Time: ', stop - start)
-    print(sa.steps)
-    print(sa.solution)
-
+    print("\nTime: %0.4fms" % ((stop - start) * 1000))
+    print("Steps:", sa.steps)
+    print("Goal State: ")
+    for i in range(dim):
+        print(sa.solution[i])
 
 
 if __name__ == '__main__':
