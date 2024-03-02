@@ -150,19 +150,25 @@ def main():
     dim = 0
     n = 0
 
+    # prompt for N-puzzle size
     while n < 8 or n > 100:
         print("Please enter a value for N (8 <= N <= 100): ")
         n = int(input())
 
+    # get square root for grid dimensions/size
     dim = math.ceil(math.sqrt(n + 1))
 
+    # starting N-puzzle state
     print("Please enter the start case state: ")
     for i in range(dim):
         grid.append([int(x) for x in input().split()])
 
+    # wrap algorithm in timer for runtime
     start = timeit.default_timer()
     sa = SimulatedAnnealing(grid)
     stop = timeit.default_timer()
+
+    # display results
     print('Time: ', stop - start)
     print(sa.steps)
     print(sa.solution)
