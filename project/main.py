@@ -27,21 +27,28 @@ def main():
                                   random.uniform(radius_min, radius_max)))
 
         # Set params
+        goal = [random.randrange(int(range_max/3), range_max),
+                random.randrange(int(range_max/3), range_max)]
         rrt = InformedRRTStar(start=[0, 0],
-                              goal=[random.randrange(int(range_max/3), range_max),
-                                    random.randrange(int(range_max/3), range_max)],
+                              goal=goal,
                               obstacle_list=obstacle_list,
                               rand_area=[range_min, range_max])
         path = rrt.informed_rrt_star_search(animation=False)
 
-    new_obstacle = random.choice(path[1:-1])
-    size = random.uniform(radius_min, radius_max)
+    new_obstacle = random.choice(path[2:-1])
+    while (goal[0] == new_obstacle[0] and goal[1] == new_obstacle[1]) or \
+           new_obstacle in obstacle_list:
+        new_obstacle = random.choice(path[1:-1])
+    new_goal = (random.randrange(goal[0], range_max),
+                random.randrange(goal[1], range_max))
+    size = random.uniform(radius_min, radius_max/2)
 
     # Plot path and new obstacle
     rrt.draw_graph()
     plt.plot([x for (x, y) in path], [y for (x, y) in path], '-r')
     plt.grid(True)
     plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=30 * size)
+    plt.plot(new_goal[0], new_goal[1], 'mo', ms=30 * size)
     plt.show()
 
 
