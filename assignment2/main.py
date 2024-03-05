@@ -66,7 +66,7 @@ class SimulatedAnnealing:
             y = random.randrange(0, dim)
 
             if (y == dim_1 and x == dim_1 and solution[dim_1][dim_1] != 0) or \
-            (solution[y][x] - 1) != (y * dim + x):
+               (solution[y][x] - 1) != (y * dim + x):
                 break
 
         # reduce for zero index
@@ -77,22 +77,22 @@ class SimulatedAnnealing:
 
         # move up, if action up and y > 0, or if action down and y == dim
         if (action == 0 and y > 0) or \
-        (action == 1 and y == dim):
+           (action == 1 and y == dim):
             solution[y][x], solution[y - 1][x] = solution[y - 1][x], solution[y][x]
 
         # move down, if action down and y < dim, or if action up and y == 0
         elif (action == 1 and y < dim) or \
-            (action == 0 and y == 0):
+             (action == 0 and y == 0):
             solution[y][x], solution[y + 1][x] = solution[y + 1][x], solution[y][x]
 
         # move left, if action left and x > 0, or if action right and x == dim
         elif (action == 2 and x > 0) or \
-            (action == 3 and x == dim):
+             (action == 3 and x == dim):
             solution[y][x], solution[y][x - 1] = solution[y][x - 1], solution[y][x]
 
         # move right, if action right and x < dim, or if action left and x == 0
         elif (action == 3 and x < dim) or \
-            (action == 2 and x == 0):
+             (action == 2 and x == 0):
             solution[y][x], solution[y][x + 1] = solution[y][x + 1], solution[y][x]
 
         return solution
@@ -137,7 +137,7 @@ class SimulatedAnnealing:
                 x2, y2 = self.valueToCoords(solution[y][x], dim)
                 _score += abs(x - x2) + abs(y - y2)
                 if (solution[y][x] == 0 and correct != n) and \
-                (solution[y][x] - 1) != correct:
+                   (solution[y][x] - 1) != correct:
                     _score += 1
                 correct += 1
 
