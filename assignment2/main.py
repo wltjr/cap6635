@@ -144,6 +144,45 @@ class SimulatedAnnealing:
         return _score
 
 
+def runSA(dim, grid):
+    """
+    Run Simulated Annealing on the grid
+
+    :param dim          dimensions/size of the grid
+    :param grid         2D list containing the problem start state
+    """
+    # wrap algorithm in timer for runtime
+    start = timeit.default_timer()
+    sa = SimulatedAnnealing(grid)
+    stop = timeit.default_timer()
+
+    # display results
+    print("Time: %0.4fms" % ((stop - start) * 1000))
+    print("Steps:", sa.steps)
+    print("Goal State: ")
+    for i in range(dim):
+        print(sa.solution[i])
+
+def runTests():
+    """
+    Run Simulated Annealing on the grid
+    """
+    grids = [
+        [[7, 2, 4], [5, 0, 6], [8, 3, 1]],
+        [[8, 6, 7], [2, 5, 4], [3, 0, 1]],
+        [[6, 4, 7], [8, 5, 0], [3, 2, 1]],
+        [[1, 2, 3], [4, 5, 6], [8, 7, 0]],
+        [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 15, 14, 0]],
+        [[15, 14, 8, 12], [10, 11, 9, 13], [2, 6, 5, 1], [3, 7, 4, 0]]
+    ]
+    for grid in grids:
+        dim = len(grid)
+        print("\nTesting grid:")
+        for i in range(dim):
+            print(grid[i])
+        print()
+        runSA(dim, grid)
+
 def main():
 
     grid = []
@@ -153,7 +192,11 @@ def main():
     # prompt for N-puzzle size
     while n < 8 or n > 100:
         print("Please enter a value for N (8 <= N <= 100): ")
-        n = int(input())
+        n = input()
+        if n.lower() == 't':
+            runTests()
+            return
+        n = int(n)
 
     # get square root for grid dimensions/size
     dim = math.ceil(math.sqrt(n + 1))
@@ -163,17 +206,10 @@ def main():
     for i in range(dim):
         grid.append([int(x) for x in input().split()])
 
-    # wrap algorithm in timer for runtime
-    start = timeit.default_timer()
-    sa = SimulatedAnnealing(grid)
-    stop = timeit.default_timer()
-
-    # display results
-    print("\nTime: %0.4fms" % ((stop - start) * 1000))
-    print("Steps:", sa.steps)
-    print("Goal State: ")
-    for i in range(dim):
-        print(sa.solution[i])
+    # empty line
+    print()
+    # run the algorithm timer wrapped with output
+    runSA(dim, grid)
 
 
 if __name__ == '__main__':
