@@ -110,12 +110,15 @@ class Graph:
             if vertex.id not in explored:
                 explored.add(vertex.id)
                 for neighbor in vertex.edges:
-                    neighbor.path = vertex.path + [neighbor.id]
+                    path = vertex.path + [neighbor.id]
                     cost = 0
-                    nodes = len(neighbor.path) - 1
+                    nodes = len(path) - 1
                     for i in range(nodes):
-                        cost += math.dist(self.vertices[neighbor.path[i]].coords,
-                                          self.vertices[neighbor.path[i+1]].coords)
+                        cost += math.dist(self.vertices[path[i]].coords,
+                                          self.vertices[path[i+1]].coords)
+                    if neighbor.cost == 0 or cost < neighbor.cost:
+                        neighbor.cost = cost
+                        neighbor.path = path
                     priority = cost + math.dist(neighbor.coords, goal.coords)
                     if neighbor.id not in explored:
                         frontier.put((priority, neighbor))
