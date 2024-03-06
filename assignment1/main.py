@@ -52,8 +52,8 @@ class ui:
         image_file = "graph.jpg"
 
         # dimensions of graph image
-        width = 1536
-        height = 1536
+        width = 1024
+        height = 1024
         node_radius = 20
 
         # color constants for PIL
@@ -61,6 +61,22 @@ class ui:
         black = (0, 0, 0)
         pink = (255, 105, 180)
         purple = (153, 119, 187)
+
+        # pre-process coords for scale, bad to process file twice...
+        scale = 0.0
+        with open(self.entry_coords.get(), "r") as file_coords:
+            for line in file_coords :
+                values = line.split()
+                scale = max(scale, float(values[1]), float(values[2]))
+
+        if scale <= 10:
+            scale = 100
+        elif scale <= 100:
+            scale = 10
+        else:
+            width = 1536
+            height = 1536
+            scale = 1
 
         # create empty PIL image to draw on in memory, image saved at end
         image = Image.new("RGBA", (width, height), (255, 0, 0, 0))
@@ -72,7 +88,7 @@ class ui:
         with open(self.entry_coords.get(), "r") as file_coords:
             for line in file_coords :
                 values = line.split()
-                vertex = Vertex(int(values[0]), (float(values[1]), float(values[2])))
+                vertex = Vertex(int(values[0]), (float(values[1]) * scale, float(values[2]) * scale))
                 # add to graph
                 graph.add_vertex(vertex)
                 # add to comboboxes
@@ -211,7 +227,8 @@ class ui:
         """
         self.cb_goal.set("")
         self.cb_start.set("")
-        self.setEntry(self.entry_coords, self.default_coord_filename) 
+        self.setEntry(self.blocked, "")
+        self.setEntry(self.entry_coords, self.default_coord_filename)
         self.setEntry(self.entry_graph, self.default_graph_filename)
         if self.label_graph:
             self.label_graph.destroy()
