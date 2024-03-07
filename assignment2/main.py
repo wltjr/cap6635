@@ -9,12 +9,15 @@ class SimulatedAnnealing:
     Simulated Annealing algorithm to find goal state
     """
 
-    def __init__(self, problem):
+    def __init__(self, dim, problem):
         """
         Simulated Annealing constructor to create new instances of class/object
 
+        :param dim          integer dimension of the 2D grid
         :param problem      2D list containing the problem start state
         """
+        self.dim = dim
+        self.N = dim ** 2 - 1
         T = 1000000000000000000   # temperature
         alpha = 0.99999         # cooling
         steps = 1
@@ -59,7 +62,7 @@ class SimulatedAnnealing:
 
         :return list        2D list containing a new random solution from current
         """
-        dim = len(solution)
+        dim = self.dim
         # find the zero/empty space
         for r in range(dim):
             for c in range(dim):
@@ -129,13 +132,12 @@ class SimulatedAnnealing:
         """
         _score = 0
         correct = 0
-        dim = len(solution)
-        n = dim ** 2 - 1
+        dim = self.dim
         for y in range(dim):
             for x in range(dim):
                 x2, y2 = self.valueToCoords(solution[y][x], dim)
                 _score += abs(x - x2) + abs(y - y2)
-                if (solution[y][x] == 0 and correct != n) and \
+                if (solution[y][x] == 0 and correct != self.N) and \
                    (solution[y][x] - 1) != correct:
                     _score += 1
                 correct += 1
@@ -152,7 +154,7 @@ def runSA(dim, grid):
     """
     # wrap algorithm in timer for runtime
     start = timeit.default_timer()
-    sa = SimulatedAnnealing(grid)
+    sa = SimulatedAnnealing(dim, grid)
     stop = timeit.default_timer()
 
     # display results
