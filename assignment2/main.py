@@ -15,8 +15,8 @@ class SimulatedAnnealing:
 
         :param problem      2D list containing the problem start state
         """
-        T = 100000000000     # temperature
-        alpha = 0.999        # cooling
+        T = 1000000000000000000   # temperature
+        alpha = 0.99999         # cooling
         steps = 1
         solution = self.generate(problem)
         E = self.score(solution)
@@ -60,14 +60,13 @@ class SimulatedAnnealing:
         :return list        2D list containing a new random solution from current
         """
         dim = len(solution)
-        dim_1 = dim - 1
-        while True:
-            x = random.randrange(0, dim)
-            y = random.randrange(0, dim)
-
-            if (y == dim_1 and x == dim_1 and solution[dim_1][dim_1] != 0) or \
-               (solution[y][x] - 1) != (y * dim + x):
-                break
+        # find the zero/empty space
+        for r in range(dim):
+            for c in range(dim):
+                if solution[r][c] == 0:
+                    x = c
+                    y = r
+                    break
 
         # reduce for zero index
         dim -= 1
