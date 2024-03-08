@@ -180,6 +180,26 @@ def runSA(dim, grid):
     for i in range(dim):
         print(sa.solution[i])
 
+def runRandomTests():
+    dim = 3
+    while dim < 11:
+        grid = []
+        n = dim**2
+        nums = [i for i in range(n)]
+        random.shuffle(nums)
+        for y in range(dim):
+            row = []
+            for x in range(dim):
+                row.append(nums.pop())
+            grid.append(row)
+
+        print("\nRandom grid %d-Puzzle %d x %d:" % (n -1, dim, dim))
+        for i in range(dim):
+            print(grid[i])
+        print()
+        runSA(dim, grid)
+        dim += 1
+
 def runTests():
     """
     Run Simulated Annealing on the grid
@@ -214,7 +234,10 @@ def main():
     while n < 8 or n > 99:
         print("Please enter a value for N (8 <= N < 100): ")
         n = input()
-        if n.lower() == 't':
+        if n.lower() == 'r':
+            runRandomTests()
+            return
+        elif n.lower() == 't':
             runTests()
             return
         elif n == '' or not n.isdigit():
