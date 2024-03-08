@@ -217,6 +217,9 @@ def main():
         if n.lower() == 't':
             runTests()
             return
+        elif n == '' or not n.isdigit():
+            n = 0
+            continue
         n = int(n)
 
     # get square root for grid dimensions/size
