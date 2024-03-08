@@ -136,11 +136,27 @@ class SimulatedAnnealing:
         for y in range(dim):
             for x in range(dim):
                 x2, y2 = self.valueToCoords(solution[y][x], dim)
+                # manhattan distance
                 _score += abs(x - x2) + abs(y - y2)
+                # euclidean distance
+                _score += math.sqrt(abs(x - x2)**2 + abs(y - y2)**2)
+                # incorrect/misplaced
                 if (solution[y][x] == 0 and correct != self.N) and \
                    (solution[y][x] - 1) != correct:
                     _score += 1
                 correct += 1
+
+        # count vertical inversions
+        array = sum(solution, [])
+        inv_count = 0
+        n = self.N - 1
+        for i in range(n):
+            for j in range(i + 1, n):
+                if array[i] > array[j]:
+                    inv_count += 1
+
+        # inverted distance, vertical inversions
+        _score += inv_count / 3 + inv_count % 3
 
         return _score
 
