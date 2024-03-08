@@ -19,7 +19,7 @@ class SimulatedAnnealing:
         self.dim = dim
         self.N = dim ** 2 - 1
         T = 1000000000000000000   # temperature
-        alpha = 0.99999         # cooling
+        alpha = 0.999999          # cooling
         steps = 1
         solution = self.generate(problem)
         E = self.score(solution)
