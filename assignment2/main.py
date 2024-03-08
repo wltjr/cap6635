@@ -193,7 +193,7 @@ def runRandomTests():
                 row.append(nums.pop())
             grid.append(row)
 
-        print("\nRandom grid %d-Puzzle %d x %d:" % (n -1, dim, dim))
+        print("\nRandom %d-Puzzle %d x %d:" % (n -1, dim, dim))
         for i in range(dim):
             print(grid[i])
         print()
@@ -218,7 +218,7 @@ def runTests():
     ]
     for grid in grids:
         dim = len(grid)
-        print("\nTesting grid:")
+        print("\nTesting puzzle:")
         for i in range(dim):
             print(grid[i])
         print()
@@ -232,7 +232,7 @@ def main():
 
     # prompt for N-puzzle size
     while n < 8 or n > 99:
-        print("Please enter a value for N (8 <= N < 100): ")
+        print("Please enter a value for N (8 <= N < 100, default = 8): ")
         n = input()
         if n.lower() == 'r':
             runRandomTests()
@@ -241,15 +241,14 @@ def main():
             runTests()
             return
         elif n == '' or not n.isdigit():
-            n = 0
-            continue
+            n = 8
         n = int(n)
 
     # get square root for grid dimensions/size
     dim = math.ceil(math.sqrt(n + 1))
 
     # starting N-puzzle state
-    print("\nPlease enter the start case state: ")
+    print("\nPlease enter the %d-Puzzle %d x %d start case state: " % (n, dim, dim))
     for i in range(dim):
         grid.append([int(x) for x in input().split()])
 
