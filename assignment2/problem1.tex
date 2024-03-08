@@ -15,8 +15,20 @@
 	\item[What does a population represent in this case?] \hfill \break
 		All of the various puzzle states, every possible N-puzzle position, all puzzle state
 		position permutations, including goal state; An array or string of unique numbers
-		representing the value in each position \\
+		representing the value in each position. \\
 		E.g. for 8-puzzle goal 012345678.
+
+        However, if applying a Monte Carlo method, where you are analyzing a sequence
+        of actions, then that could be used as the population, all the possible action step
+        combinations to solving a puzzle based on a given start state, to find one or more
+        goal sequences. This would need some cut off point so that all sequences of
+        actions are the same length. This would be to experiment with the possibility 
+        of solving with a fixed and limited number of actions. \\
+		E.g. for 8 action 8-puzzle starting/ending in empty 0,0 LLUURRDD.
+
+        The population could be either all the various states, and seeing which states
+        can lead to an order of actions to follow, or using the actions as the population
+        to determine the way to solve a given state.
 
 	\item[What is your mutation function?] \hfill \break
 		A function that changes the various values representing the tile positions in any puzzle
@@ -26,10 +38,17 @@
 		of others. \\
 		E.g. for 8-puzzle 8765\underline{4}3210 $\rightarrow$ 4765\underline{8}3210
 
+        This is basically the same as the generate function used for Simulated Annealing,
+        where you would pick a random position to change/mutate, which is like generating
+        a new puzzle state in SA. Both require that as you change one, you must change
+        another as values cannot be duplicated, puzzle pieces are unique. It is possible
+        the exact generate function could be used for both GA and SA.
+
 	\item[How does crossover happen in this case?] \hfill \break
 		Cross over would need to take place based on the max/min amount of unique characters
 		in each puzzle state, as the crossover could not duplicate the values for any puzzle
-		state \\
+		state. This would vary between any two states being crossed over, but should be at
+        at least 2-3 unique in each, but its possible there could be less. \\
 		E.g. for 8-puzzle \underline{012}345678 x 876543\underline{210} $\rightarrow$ \underline{210}345678 | 876543\underline{012}
 
 	\item[How do you evaluate the quality of a chromosome in this scenario?] \hfill
@@ -37,7 +56,11 @@
 		chromosome, to determine which ones are of highest value, highest score, closest to
 		or the goal state. One method of scoring combines the number of correct puzzle
 		positions along with the Manhattan distance, with lower score being more desirable
-		and goal/stop at 0.
+		and goal/stop at 0 to formulate the heuristic.
+
+        This would most likely be the exact same heuristics and scoring mechanism
+        as used in Simulated Annealing, as both would need to score the puzzle
+        state the same.
 
 \end{description}
 \end{document}
