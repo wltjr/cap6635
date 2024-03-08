@@ -3,20 +3,20 @@
     \author{William L. Thomson Jr.}
     \date{Spring Semester 2024}
 
-    \addtolength{\topmargin}{-3cm}
-    \addtolength{\textheight}{3cm}
-    
     \usepackage{enumitem}
+    \usepackage[T1]{fontenc}
+    \usepackage[tmargin=1in,lmargin=1in,rmargin=1in]{geometry}
+
 \begin{document}
 
 \maketitle
 
-\begin{description}[itemsep=1em]
+\begin{description}[itemsep=1em, leftmargin=0cm]
 	\item[What does a population represent in this case?] \hfill \break
 		All of the various puzzle states, every possible N-puzzle position, all puzzle state
 		position permutations, including goal state; An array or string of unique numbers
 		representing the value in each position. \\
-		E.g. for 8-puzzle goal 012345678.
+		\emph{e.g.} for 8-puzzle goal 012345678.
 
         However, if applying a Monte Carlo method, where you are analyzing a sequence
         of actions, then that could be used as the population, all the possible action step
@@ -24,7 +24,7 @@
         goal sequences. This would need some cut off point so that all sequences of
         actions are the same length. This would be to experiment with the possibility 
         of solving with a fixed and limited number of actions. \\
-		E.g. for 8 action 8-puzzle starting/ending in empty 0,0 LLUURRDD.
+		\emph{e.g.} for 8 action 8-puzzle starting/ending in empty 0,0 LLUURRDD.
 
         The population could be either all the various states, and seeing which states
         can lead to an order of actions to follow, or using the actions as the population
@@ -36,13 +36,15 @@
 		entail replacing the new value with the old at what ever position the old was located,
 		as game rules would not allow for the same value in multiple locations, nor absence
 		of others. \\
-		E.g. for 8-puzzle 8765\underline{4}3210 $\rightarrow$ 4765\underline{8}3210
+		\emph{e.g.} for 8-puzzle 8765\underline{4}3210 $\rightarrow$ 4765\underline{8}3210
 
         This is basically the same as the generate function used for Simulated Annealing,
         where you would pick a random position to change/mutate, which is like generating
         a new puzzle state in SA. Both require that as you change one, you must change
         another as values cannot be duplicated, puzzle pieces are unique. It is possible
         the exact generate function could be used for both GA and SA.
+
+
 
 	\item[How does crossover happen in this case?] \hfill \break
 		Cross over would need to take place based on the max/min amount of unique characters
@@ -51,7 +53,7 @@
         at least 2-3 unique in each, but its possible there could be less. \\
 		E.g. for 8-puzzle \underline{012}345678 x 876543\underline{210} $\rightarrow$ \underline{210}345678 | 876543\underline{012}
 
-	\item[How do you evaluate the quality of a chromosome in this scenario?] \hfill
+	\item[How do you evaluate the quality of a chromosome in this scenario?] \hfill \break
 		You would need some scoring mechanism to score the resulting game state, aka
 		chromosome, to determine which ones are of highest value, highest score, closest to
 		or the goal state. One method of scoring combines the number of correct puzzle
