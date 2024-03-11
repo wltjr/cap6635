@@ -4,7 +4,9 @@
     \date{Spring Semester 2024}
 
     \usepackage{enumitem}
+    \usepackage{float}
     \usepackage{hyperref}
+    \usepackage{graphicx}
     \usepackage[T1]{fontenc}
     \usepackage{titlesec}
     \usepackage[tmargin=1in,lmargin=1in,rmargin=1in]{geometry}
@@ -21,7 +23,8 @@
 \begin{document}
 
 \maketitle
-\thispagestyle{empty}
+
+\vspace{-2em}
 
 \section{Research}
 \indent \indent Initial research done thus far is mostly in understanding the paper implementation and
@@ -35,12 +38,12 @@ after the fact with the new route taken, either back to original or entirely new
 goal, which might entail another round of IRRT*.
 
 \section{Plan}
-The far the plan of action is as follows:
+The current plan of action is as follows:
 \begin{description}[style=multiline,leftmargin=8em]
 \itemsep0em
 \item[IRRT*] Run IRRT* to determine the path to goal with random obstacles
-\item[New Obstacle] A new obstacle is randomly added/detected as the path is being traverse
-					to the path that IRRT* identified, the new obstacle intersects that path.
+\item[New Obstacle] A new obstacle is randomly added/detected as the path is being traversed,
+					the path that IRRT* identified, the new obstacle intersects that path.
 \item[Collision Zone] The path will be traversed till the obstacle enters a collision zone,
                       which might require adding a new node, as the collision zone might
                       be smaller than the distance from the previous node to the new obstacle
@@ -52,14 +55,48 @@ The far the plan of action is as follows:
 
 \section{Progress}
 \indent \indent Initial prototype code has been written using \href{https://github.com/AtsushiSakai/PythonRobotics/tree/master/PathPlanning/InformedRRTStar}{PythonRobotics implementation of IRRT*}, with randomized
-start, goal, and obstacles. After IRRT* is run, a obstacle is randomly added long the path. Alternative prototyping was also done with a new random goal, per the paper implementation,
-but we will not be exploring that approach. Screenshots have been demonstrated, and will be
-provided alongside this documentation, but are not being kept, as there is no justification
-for preservation, as hundreds of these will be generated throughout the project.
+start, goal, and obstacles. After IRRT* is run, a obstacle is randomly added long the path
+as seen in Figure \ref{figure1}. Alternative prototyping was also done with a new random goal, per the paper implementation as seen in Figure \ref{figure2} and \ref{figure3}, but we will not be exploring that approach. Although, it does present an additional challenge, if that new obstacle causes a new goal, \emph{e.g.}  door closed obstacle, or other none traversal.
 
 \section{What's next}
 \indent \indent The next step is to code in a variable collision zone, and code for detecting the nearest node to the newly detected object, and potentially, creating another outside the collision zone distance, that will be used as a buffer distance for Tangent Bug to remain that distance away from the
 obstacle.
+
+\vspace{1em}
+
+\newpage
+\addtolength{\topmargin}{2cm}
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.35]{screenshots/shot1_random_obstacle}
+\caption{Screenshot of random obstacle on IRRT* path}
+\label{figure1}
+\end{center}
+\end{figure}
+
+\vspace{-2em}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.35]{screenshots/shot2_new_goal}
+\caption{Screenshot of random new goal on IRRT* path}
+\label{figure2}
+\end{center}
+
+\vspace{-2em}
+
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.35]{screenshots/shot3_new_goal}
+\caption{Screenshot of random new goal on IRRT* path}
+\label{figure3}
+\end{center}
+\end{figure}
+
+\vspace{-3em}
 
 \end{document}
 
