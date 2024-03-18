@@ -24,6 +24,13 @@ class ui:
     User Interface class displays GUI for the project and is the main class
     """
 
+    def centerWindow(self):
+        """
+        Center the window in screen
+        """
+        if sys.version_info[1] > 9:
+            self.root.eval('tk::PlaceWindow %s center' % self.root.winfo_pathname(self.root.winfo_id()))
+
     def setEntry(self, entry, text):
         """
         Clear and set new text for a entry field
@@ -114,6 +121,8 @@ class ui:
         # reset button
         btn_reset = Button(root, text='Reset', command=self.reset)
         btn_reset.pack(side=RIGHT, padx=5, pady=5)
+
+        self.centerWindow()
 
         root.mainloop()
 
