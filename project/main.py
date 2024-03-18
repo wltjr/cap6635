@@ -114,10 +114,15 @@ class ui:
                                   rand_area=[range_min, range_max])
             path = rrt.informed_rrt_star_search(animation=False)
 
-        new_obstacle = random.choice(path[2:-1])
-        while (goal[0] == new_obstacle[0] and goal[1] == new_obstacle[1]) or \
-            new_obstacle in obstacle_list:
-            new_obstacle = random.choice(path[1:-1])
+        inner_path = path[2:-1]
+        inner_len = len(inner_path) - 1
+        new_obstacle = random.choice(inner_path)
+        while new_obstacle in obstacle_list:
+            new_obstacle = random.choice(inner_path)
+        for i in range(inner_len):
+            if inner_path[i] == new_obstacle:
+                new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
+                                (inner_path[i][1] + inner_path[i+1][1])/2)
         size = random.uniform(radius_min, radius_max/2)
 
         # Plot path and new obstacle
