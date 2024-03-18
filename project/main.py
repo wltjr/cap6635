@@ -106,8 +106,8 @@ class ui:
                                     random.uniform(radius_min, radius_max)))
 
             # Set params
-            goal = [random.randrange(int(range_max/3), range_max),
-                    random.randrange(int(range_max/3), range_max)]
+            goal = [random.randrange(random.randrange(int(range_max/5), int(range_max/1.75)), range_max),
+                    random.randrange(random.randrange(int(range_max/5), int(range_max/1.75)), range_max)]
             rrt = InformedRRTStar(start=[0, 0],
                                   goal=goal,
                                   obstacle_list=obstacle_list,
