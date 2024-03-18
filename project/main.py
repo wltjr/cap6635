@@ -9,6 +9,7 @@ from tkinter import Button, Entry, Frame, Label, LEFT, RIGHT, TOP, X
 import matplotlib.pyplot as plt
 import matplotlib
 import random
+import sys
 
 matplotlib.use('TkAgg')
 
@@ -71,15 +72,17 @@ class ui:
         canvas =  plt.gcf().canvas.get_tk_widget()
 
         # get window root
-        root = canvas.winfo_toplevel()
+        self.root = root = canvas.winfo_toplevel()
         root.resizable(True, True)
 
         # get NavigationToolbar2Tk
         navigationToolbar2Tk = root.pack_slaves()[0]
         # remove from root
+        canvas.pack_forget()
         navigationToolbar2Tk.pack_forget()
         # add back to root
         navigationToolbar2Tk.pack(side=TOP, fill=X)
+        canvas.pack(side=TOP, fill=X)
 
         # add primary frame
         frame = Frame(root)
