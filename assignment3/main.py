@@ -36,6 +36,37 @@ class ValueIteration():
 
         return
 
+    def reward(self, state, action):
+        """
+        reward utility function produces a reward for moving from current state to
+        the next based on the action.
+
+        :param state        the current state represented as a tuple (x,y)
+        :param action       the action for the current state that leads to the next
+
+        :return reward      the reward for the action leading to the next state
+        """
+        reward = 0
+        x, y = state
+
+        # move up, if action up and y > 0
+        if action == 0 and y > 0:
+            reward = self.STATES[x][y-1]
+
+        # move down, if action down and y < dim
+        elif action == 1 and y < self.dim:
+            reward = self.STATES[x][y+1]
+
+        # move left, if action left and x > 0
+        elif action == 2 and x > 0:
+            reward = self.STATES[x-1][y]
+
+        # move right, if action right and x < dim
+        elif action == 3 and x < self.dim:
+            reward = self.STATES[x+1][y]
+
+        return reward
+
 def main():
     discountFactor = 0.99
     R = [-100, -3, 0, +3]
