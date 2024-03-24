@@ -6,6 +6,63 @@ DOWN = 1
 LEFT = 2
 RIGHT = 3
 
+class MDP():
+    """
+    Markov decision process class
+    """
+
+    def __init__(self, grid, terminal, discount_factor):
+        """
+
+        """
+        self.discount_factor = discount_factor
+        self.states = ()
+        self.Rmax = grid[terminal[1]][terminal[0]]
+        for y,x in grid:
+            if (x,y) != terminal:
+               self.states.add((x,y))
+
+    def actions(self, state):
+        """
+        Available actions for a given state (x,y)
+
+        :param state        the current state represented as a tuple (x,y)
+
+        :return actions     a list of actions
+        """
+        x, y = state
+        actions = []
+
+        if y > 0:                   # if y > 0 add action move up
+            actions.append(UP)
+
+        if y < self.dim:          # if y < dim add action move down
+            actions.append(DOWN)
+
+        if x > 0:                   # if y > 0 add action move left
+            actions.append(LEFT)
+
+        if x < self.dim:          # if x < dim add action move right
+            actions.append(RIGHT)
+
+        return actions
+
+    def transitionModel(self, state, action):
+        """
+        Get the probability of the next state given the current state and action
+
+        :param state        the current state represented as a tuple (x,y)
+
+        :return actions     a list of actions
+        """
+        x, y = state
+
+        probability = 0.1
+
+
+        return probability
+
+
 class ValueIteration():
     """
     Value iteration algorithm returns a utility function
