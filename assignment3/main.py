@@ -17,9 +17,10 @@ class MDP():
         """
         self.discount_factor = discount_factor
         self.grid = grid
+        self.dim = len(grid)
         self.states = []
         self.Rmax = grid[terminal[1]][terminal[0]]
-        self.dim = len(grid)
+        self.terminal = terminal
         for y in range(self.dim):
             for x in range(self.dim - 1 , -1 , -1):
                 self.states.append((x,y))
@@ -34,6 +35,9 @@ class MDP():
         """
         x, y = state
         actions = []
+
+        if state == self.terminal:
+            return actions
 
         if y > 0:                   # if y > 0 add action move up
             actions.append(UP)
