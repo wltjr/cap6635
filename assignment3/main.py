@@ -53,44 +53,37 @@ class MDP():
 
         return actions
 
-    def transitionModel(self, state, action):
+    def transitions(self, state, action):
         """
-        Get the probability of the next state given the current state and action
+        Get a list of the next states and their corresponding probabilities
 
-        :param state        the current state represented as a tuple (x,y)
+        :param state            the current state represented as a tuple (x,y)
+        :param action           the action to be taken at the current state
 
-        :return actions     a list of actions
+        :return transitions     a list of next states and their probabilities
         """
         x, y = state
+        actions = self.actions(state)
+        inverse = 0.1
+        # probability based on available actions
+        selected = 1 - (len(actions) * inverse)
+        transitions = []
 
-        intended = False
-        probability = 0.1
-        next_state = state
+        for a in actions:
+            probability = inverse
+            if a == action:
+                probability = selected
+            if action == UP:
+                next_state = (x, y - 1)
+            elif action == DOWN:
+                next_state = (x, y + 1)
+            elif action == LEFT:
+                next_state = (x - 1, y)
+            elif action == RIGHT:
+                next_state = (x + 1, y)
+            transitions.append((next_state, probability))
 
-        # move up, if action up and y > 0
-        if action == UP:
-            next_state = (x, y - 1)
-            intended = True
-
-        # move down, if action down and y < dim
-        elif action == DOWN:
-            next_state = (x, y + 1)
-            intended = True
-
-        # move left, if action left and x > 0
-        elif action == LEFT:
-            next_state = (x - 1, y)
-            intended = True
-
-        # move right, if action right and x < dim
-        elif action == RIGHT:
-            next_state = (x + 1, y)
-            intended = True
-
-        if intended:
-            probability = 0.8
-
-        return next_state, probability
+        return transitions
 
 
 class ValueIteration():
@@ -116,16 +109,17 @@ class ValueIteration():
 
             for state in mdp.states:
                 for action in mdp.actions(state):
-                    next_state,probability = mdp.transitionModel(state, action)
-                    value = probability * \
-                            (self.reward(self, state, action) + \
-                            mdp.discount_factor * U[next_state[1]][next_state[0]])
+                    value = 0.0
+                    for next_state,probability in mdp.transitions(state, action):
+                        value += probability * \
+                                ((self.reward(self, state, action) + \
+                                 mdp.discount_factor * U[next_state[1]][next_state[0]]))
 
-                    U_prime[state[1]][state[0]] = max(sum(mdp.actions(state)), value)
+                    U_prime[state[1]][state[0]] = value
                     # U_prime[state[1]][state[0]] = max(sum(mdp.actions(state)), self.qValue(mdp, state, action, U))
                     maxChange = max(abs(U_prime[state[1]][state[0]] - U[state[1]][state[0]]), maxChange)
-                if maxChange <= maxError * (1 - mdp.discount_factor) / mdp.discount_factor:
-                    return U
+            if maxChange <= maxError * (1 - mdp.discount_factor) / mdp.discount_factor:
+                return U
 
     def qValue(self,mdp, state, action, U):
 
