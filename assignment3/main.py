@@ -153,12 +153,12 @@ def main():
     discountFactor = 0.99
     R = [-100, -3, 0, +3]
     world = [[r, -1 , 10, ], [-1, -1, -1], [-1, -1, -1]]
-    actions = (0, 1, 2, 3)
+    terminal = (2,0) # x,y
 
     for r in R:
         world[0][0] = r
-#        STATES,A,P,R,delta = mdp
-        mdp = (world, actions,  discountFactor)
+        mdp = MDP(world, terminal, discountFactor)
+        print(ValueIteration(mdp))
 
 
 
