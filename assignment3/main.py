@@ -15,6 +15,7 @@ class MDP():
         """
 
         """
+        self.actions_ = {}
         self.discount_factor = discount_factor
         self.grid = grid
         self.dim = len(grid)
@@ -25,6 +26,24 @@ class MDP():
             for x in range(self.dim - 1 , -1 , -1):
                 self.states.append((x,y))
 
+                actions = []
+                if y > 0:                   # if y > 0 add action move up
+                    actions.append(UP)
+
+                if y < self.dim - 1:          # if y < dim add action move down
+                    actions.append(DOWN)
+
+                if x > 0:                   # if x > 0 add action move left
+                    actions.append(LEFT)
+
+                if x < self.dim - 1:          # if x < dim add action move right
+                    actions.append(RIGHT)
+
+                if (x,y) == self.terminal:
+                    actions = []
+
+                self.actions_[''.join(map(str, (x,y)))] = actions
+
     def actions(self, state):
         """
         Available actions for a given state (x,y)
@@ -33,25 +52,8 @@ class MDP():
 
         :return actions     a list of actions
         """
-        x, y = state
-        actions = []
+        return self.actions_[''.join(map(str, state))]
 
-        if state == self.terminal:
-            return actions
-
-        if y > 0:                   # if y > 0 add action move up
-            actions.append(UP)
-
-        if y < self.dim - 1:          # if y < dim add action move down
-            actions.append(DOWN)
-
-        if x > 0:                   # if y > 0 add action move left
-            actions.append(LEFT)
-
-        if x < self.dim - 1:          # if x < dim add action move right
-            actions.append(RIGHT)
-
-        return actions
 
     def transitions(self, state, action):
         """
