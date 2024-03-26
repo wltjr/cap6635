@@ -112,23 +112,31 @@ class ValueIteration():
 
             for state in mdp.states:
                 for action in mdp.actions(state):
-                    value = 0.0
-                    for next_state,probability in mdp.transitions(state, action):
-                        value += probability * \
-                                ((self.reward(self, state, action) + \
-                                 mdp.discount_factor * U[next_state[1]][next_state[0]]))
-
-                    U_prime[state[1]][state[0]] = value
-                    # U_prime[state[1]][state[0]] = max(sum(mdp.actions(state)), self.qValue(mdp, state, action, U))
+                    U_prime[state[1]][state[0]] = self.maxQValue(self, mdp, state, action, U)
                     maxChange = max(abs(U_prime[state[1]][state[0]] - U[state[1]][state[0]]), maxChange)
+
             if maxChange <= sigma_gamma:
                 return U
 
-    def qValue(self,mdp, state, action, U):
+    def maxQValue(self, mdp, state, action, U):
+        """
+        Maximum Q-value function to return the maximum value for the state given
+        the actions and probabilities
 
-        # sum(P(state_prime|state, action)(self.reward(state, action) + self.gamma * U[state_prime]))
+        :param mdp          a MDP with states S, actions A(s), transition model P(s'|s,a),
+                            rewards R(s,a,s'), discount γ/gamma
+        :param state        the current state represented as a tuple (x,y)
+        :param action       the action for the current state that leads to the next
+        :param U            a policy, vector of utility values for each state
 
-        return
+        :return value       a float, the maximum q-value
+        """
+        values = []
+        for next_state,probability in mdp.transitions(state, action):
+            values.append(probability * \
+                          ((self.reward(self, state, action) + \
+                            mdp.discount_factor * U[next_state[1]][next_state[0]])))
+        return max(values)
 
     def reward(self, state, action):
         """
