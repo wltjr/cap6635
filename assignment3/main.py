@@ -183,12 +183,16 @@ def main():
     R = [-100, -3, 0, +3]
     r = R[0]
     world = [[r, -1 , 10, ], [-1, -1, -1], [-1, -1, -1]]
+    dim = len(world)
     terminal = (2,0) # x,y
 
     for r in R:
         world[0][0] = r
         mdp = MDP(world, terminal, discountFactor)
-        print(ValueIteration(mdp))
+        policy = ValueIteration(mdp)
+        for i in range(dim):
+            print(policy[i])
+        print()
 
 
 
