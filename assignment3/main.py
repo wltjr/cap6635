@@ -188,21 +188,49 @@ class ValueIteration():
             utility += self.gamma ** i * self.reward(state, action)
 
         return utility
+    
+def displayPolicy(terminal, dim, policy):
+    """
+    Display a policy converting numeric values into one U, D, L, R actions
+
+    :param terminal     the terminal state represented as a tuple (x,y)
+    :param dim          the policy/grid dimensions
+    :param policy       a policy, vector of utility values for each state
+    """
+    for y in range(dim):
+        for x in range(dim):
+            if (x,y) == terminal:
+                continue
+
+            values = {}
+            if y > 0:                   # if y > 0 add action move up
+                values[str(policy[y-1][x])] = "U"
+            if y < dim - 1:          # if y < dim add action move down
+                values[str(policy[y+1][x])] = "D"
+            if x > 0:                   # if x > 0 add action move left
+                values[str(policy[y][x-1])] = "L"
+            if x < dim - 1:          # if x < dim add action move right
+                values[str(policy[y][x+1])] = "R"
+    
+            policy[y][x] = list(dict(sorted(values.items(), reverse=True)).values())[0]
+    
+    for i in range(dim):
+        print(policy[i])
+
 
 def main():
     discountFactor = 0.99
     R = [-100, -3, 0, +3]
-    r = R[0]
-    world = [[r, -1 , 10, ], [-1, -1, -1], [-1, -1, -1]]
-    dim = len(world)
     terminal = (2,0) # x,y
 
     for r in R:
-        world[0][0] = r
+        world = [[r, -1 , 10, ], [-1, -1, -1], [-1, -1, -1]]
+        dim = len(world)
         mdp = MDP(world, terminal, discountFactor)
         policy = ValueIteration(mdp)
         for i in range(dim):
             print(policy[i])
+        displayPolicy(terminal, dim, policy)
         print()
 
 
