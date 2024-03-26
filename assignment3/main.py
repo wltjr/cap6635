@@ -104,10 +104,11 @@ class ValueIteration():
         U = [[]]
         U_prime = mdp.grid
         self.mdp = mdp
+        sigma_gamma = maxError * (1 - mdp.discount_factor) / mdp.discount_factor
 
         while True:
             self.U = U = U_prime
-            maxChange = 0
+            maxChange = 0.0
 
             for state in mdp.states:
                 for action in mdp.actions(state):
@@ -120,7 +121,7 @@ class ValueIteration():
                     U_prime[state[1]][state[0]] = value
                     # U_prime[state[1]][state[0]] = max(sum(mdp.actions(state)), self.qValue(mdp, state, action, U))
                     maxChange = max(abs(U_prime[state[1]][state[0]] - U[state[1]][state[0]]), maxChange)
-            if maxChange <= maxError * (1 - mdp.discount_factor) / mdp.discount_factor:
+            if maxChange <= sigma_gamma:
                 return U
 
     def qValue(self,mdp, state, action, U):
