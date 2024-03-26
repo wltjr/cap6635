@@ -154,21 +154,21 @@ class ValueIteration():
         reward = 0
         x, y = state
 
-        # move up, if action up and y > 0
+        # get reward above, if action up and y > 0
         if action == UP and y > 0:
-            reward = self.U[x][y-1]
+            reward = self.U[y-1][x]
 
-        # move down, if action down and y < dim
+        # get reward below, if action down and y < dim
         elif action == DOWN and y < self.mdp.dim - 1:
-            reward = self.U[x][y+1]
+            reward = self.U[y+1][x]
 
-        # move left, if action left and x > 0
+        # get reward left, if action left and x > 0
         elif action == LEFT and x > 0:
-            reward = self.U[x-1][y]
+            reward = self.U[y][x-1]
 
-        # move right, if action right and x < dim
+        # get reward right, if action right and x < dim
         elif action == RIGHT and x < self.mdp.dim - 1:
-            reward = self.U[x+1][y]
+            reward = self.U[y][x+1]
 
         return reward
 
