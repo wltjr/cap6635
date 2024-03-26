@@ -13,7 +13,7 @@ class MDP():
 
     def __init__(self, grid, terminal, discount_factor):
         """
-
+        Initialize instance of MDP class, set variables, load states and actions
         """
         self.actions_ = {}
         self.discount_factor = discount_factor
@@ -90,11 +90,14 @@ class MDP():
 
 class ValueIteration():
     """
-    Value iteration algorithm returns a utility function
+    Value iteration algorithm returns a policy, utility values for each state
     """
 
     def __new__(self, mdp, maxError=2):
         """
+        Create a new ValueIteration instance and run the algorithm returning the
+        policy results
+
         :param mdp          a MDP with states S, actions A(s), transition model P(s'|s,a),
                             rewards R(s,a,s'), discount γ/gamma
         :param maxError     the maximum error/ε allowed in the utility of any state
