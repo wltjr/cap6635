@@ -200,17 +200,18 @@ def displayPolicy(terminal, dim, policy):
     for y in range(dim):
         for x in range(dim):
             if (x,y) == terminal:
+                policy[y][x] = 'G'
                 continue
 
             values = {}
             if y > 0:                   # if y > 0 add action move up
-                values[str(policy[y-1][x])] = "U"
+                values[str(policy[y-1][x])] = "↑"
             if y < dim - 1:          # if y < dim add action move down
-                values[str(policy[y+1][x])] = "D"
+                values[str(policy[y+1][x])] = "↓"
             if x > 0:                   # if x > 0 add action move left
-                values[str(policy[y][x-1])] = "L"
+                values[str(policy[y][x-1])] = "←"
             if x < dim - 1:          # if x < dim add action move right
-                values[str(policy[y][x+1])] = "R"
+                values[str(policy[y][x+1])] = "→"
     
             policy[y][x] = list(dict(sorted(values.items(), reverse=True)).values())[0]
     
