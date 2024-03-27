@@ -172,22 +172,6 @@ class ValueIteration():
 
         return reward
 
-    def utility(self, state, action):
-        """
-        reward utility function produces a reward for moving from current state to
-        the next based on the action.
-
-        :param state        the current state represented as a tuple (x,y)
-        :param action       the action for the current state that leads to the next
-
-        :return reward      the reward for the action leading to the next state
-        """
-        utility = 0
-
-        for i in count(): 
-            utility += self.gamma ** i * self.reward(state, action)
-
-        return utility
     
 def displayPolicy(terminal, dim, policy):
     """
