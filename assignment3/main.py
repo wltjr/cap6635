@@ -172,7 +172,7 @@ class ValueIteration():
 
         return reward
 
-    
+
 def displayPolicy(terminal, dim, policy):
     """
     Display a policy converting numeric values into one U, D, L, R actions
@@ -196,9 +196,9 @@ def displayPolicy(terminal, dim, policy):
                 values[str(policy[y][x-1])] = "←"
             if x < dim - 1:          # if x < dim add action move right
                 values[str(policy[y][x+1])] = "→"
-    
+
             policy[y][x] = list(dict(sorted(values.items(), reverse=True)).values())[0]
-    
+
     for i in range(dim):
         print(policy[i])
 
