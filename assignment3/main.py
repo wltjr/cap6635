@@ -105,7 +105,7 @@ class ValueIteration():
         :return U           a policy, vector of utility values for each state
         """
         U = [[]]
-        U_prime = mdp.grid
+        U_prime = [[0 for _ in range(mdp.dim)] for _ in range(mdp.dim)]
         self.mdp = mdp
         sigma_gamma = maxError * (1 - mdp.discount_factor) / mdp.discount_factor
 
@@ -156,19 +156,19 @@ class ValueIteration():
 
         # get reward above, if action up and y > 0
         if action == UP and y > 0:
-            reward = self.U[y-1][x]
+            reward = self.mdp.grid[y-1][x]
 
         # get reward below, if action down and y < dim
         elif action == DOWN and y < self.mdp.dim - 1:
-            reward = self.U[y+1][x]
+            reward = self.mdp.grid[y+1][x]
 
         # get reward left, if action left and x > 0
         elif action == LEFT and x > 0:
-            reward = self.U[y][x-1]
+            reward = self.mdp.grid[y][x-1]
 
         # get reward right, if action right and x < dim
         elif action == RIGHT and x < self.mdp.dim - 1:
-            reward = self.U[y][x+1]
+            reward = self.mdp.grid[y][x+1]
 
         return reward
 
