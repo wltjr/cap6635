@@ -1,3 +1,4 @@
+import copy
 
 # direction constants
 UP = 0
@@ -103,13 +104,12 @@ class ValueIteration():
 
         :return U           a policy, vector of utility values for each state
         """
-        U = [[]]
         U_prime = [[0 for _ in range(mdp.dim)] for _ in range(mdp.dim)]
         self.mdp = mdp
         sigma_gamma = maxError * (1 - mdp.discount_factor) / mdp.discount_factor
 
         while True:
-            self.U = U = U_prime
+            U = copy.deepcopy(U_prime)
             maxChange = 0.0
 
             for state in mdp.states:
