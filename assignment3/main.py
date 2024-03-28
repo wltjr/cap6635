@@ -1,4 +1,3 @@
-from itertools import count
 
 # direction constants
 UP = 0
