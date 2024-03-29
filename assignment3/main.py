@@ -58,24 +58,25 @@ class MDP():
         """
         x, y = state
         actions = self.actions(state)
+        probability = 1
         inverse = 0.1
-        # probability based on available actions
-        selected = 1 - (len(actions) * inverse)
         transitions = []
 
-        for a in actions:
-            probability = inverse
-            if a == action:
-                probability = selected
-            if action == UP:
-                next_state = (x, y - 1)
-            elif action == DOWN:
-                next_state = (x, y + 1)
-            elif action == LEFT:
-                next_state = (x - 1, y)
-            elif action == RIGHT:
-                next_state = (x + 1, y)
-            transitions.append((next_state, probability))
+        for a,valid in actions:
+            if valid:
+                if a == UP and action != DOWN:
+                    probability -= inverse
+                    transitions.append(((x, y - 1), inverse))
+                elif a == DOWN and action != UP:
+                    probability -= inverse
+                    transitions.append(((x, y + 1), inverse))
+                elif a == LEFT and action != RIGHT:
+                    probability -= inverse
+                    transitions.append(((x - 1, y), inverse))
+                elif a == RIGHT and action != LEFT:
+                    probability -= inverse
+                    transitions.append(((x + 1, y), inverse))
+        transitions.append((state, probability))
 
         return transitions
 
