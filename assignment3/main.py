@@ -208,12 +208,19 @@ def main():
     for r in R:
         world = [[r, -1 , 10, ], [-1, -1, -1], [-1, -1, -1]]
         dim = len(world)
+        print("-" * 12 + " R = " + str(r) + " " + "-" * 12)
+        print("Reward table:")
+        for i in range(dim):
+            print(world[i])
         mdp = MDP(world, terminal, discountFactor)
+        print("\nNumeric policy:")
         policy = ValueIteration(mdp)
+        policy[terminal[1]][terminal[0]] = world[terminal[1]][terminal[0]]
         for i in range(dim):
             print(policy[i])
+        print("\nArrow policy:")
         displayPolicy(terminal, dim, policy)
-        print()
+        print("-" * 32 + "\n")
 
 
 
