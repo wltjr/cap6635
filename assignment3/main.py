@@ -177,26 +177,27 @@ def displayPolicy(terminal, dim, policy):
     :param dim          the policy/grid dimensions
     :param policy       a policy, vector of utility values for each state
     """
+    display = [[0 for _ in range(dim)] for _ in range(dim)]
     for y in range(dim):
         for x in range(dim):
             if (x,y) == terminal:
-                policy[y][x] = 'G'
+                display[y][x] = 'G'
                 continue
 
-            values = {}
+            values = []
             if y > 0:                   # if y > 0 add action move up
-                values[str(policy[y-1][x])] = "↑"
+                values.append((policy[y-1][x], "↑"))
             if y < dim - 1:          # if y < dim add action move down
-                values[str(policy[y+1][x])] = "↓"
+                values.append((policy[y+1][x], "↓"))
             if x > 0:                   # if x > 0 add action move left
-                values[str(policy[y][x-1])] = "←"
+                values.append((policy[y][x-1], "←"))
             if x < dim - 1:          # if x < dim add action move right
-                values[str(policy[y][x+1])] = "→"
+                values.append((policy[y][x+1], "→"))
 
-            policy[y][x] = list(dict(sorted(values.items(), reverse=True)).values())[0]
+            display[y][x] = sorted(values, key=lambda x: x[0], reverse=True)[0][1]
 
     for i in range(dim):
-        print(policy[i])
+        print(display[i])
 
 
 def main():
