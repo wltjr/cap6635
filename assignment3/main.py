@@ -86,7 +86,7 @@ class ValueIteration():
     Value iteration algorithm returns a policy, utility values for each state
     """
 
-    def __new__(self, mdp, maxError=2):
+    def __new__(self, mdp, maxError=0.0001):
         """
         Create a new ValueIteration instance and run the algorithm returning the
         policy results
