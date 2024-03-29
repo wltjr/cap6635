@@ -22,25 +22,17 @@ class MDP():
         self.states = []
         self.Rmax = grid[terminal[1]][terminal[0]]
         self.terminal = terminal
+        # memoize state actions
         for y in range(self.dim):
             for x in range(self.dim - 1 , -1 , -1):
                 self.states.append((x,y))
 
                 actions = []
-                if y > 0:                   # if y > 0 add action move up
-                    actions.append(UP)
-
-                if y < self.dim - 1:          # if y < dim add action move down
-                    actions.append(DOWN)
-
-                if x > 0:                   # if x > 0 add action move left
-                    actions.append(LEFT)
-
-                if x < self.dim - 1:          # if x < dim add action move right
-                    actions.append(RIGHT)
-
-                if (x,y) == self.terminal:
-                    actions = []
+                if (x,y) != self.terminal:
+                    actions.append((UP, y > 0))
+                    actions.append((DOWN, y < self.dim - 1))
+                    actions.append((LEFT, x > 0))
+                    actions.append((RIGHT, x < self.dim - 1))
 
                 self.actions_[''.join(map(str, (x,y)))] = actions
 
