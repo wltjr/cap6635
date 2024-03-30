@@ -61,22 +61,38 @@ class MDP():
         probability = 1
         inverse = 0.1
         transitions = []
+        optimal = False
 
         for a,valid in actions:
             if valid:
-                if a == UP and action != DOWN:
+                if a == action:
+                    optimal = True
+                if a == UP and action != UP and action != DOWN:
                     probability -= inverse
                     transitions.append(((x, y - 1), inverse))
-                elif a == DOWN and action != UP:
+                elif a == DOWN and action != DOWN and action != UP:
                     probability -= inverse
                     transitions.append(((x, y + 1), inverse))
-                elif a == LEFT and action != RIGHT:
+                elif a == LEFT and action != LEFT and action != RIGHT:
                     probability -= inverse
                     transitions.append(((x - 1, y), inverse))
-                elif a == RIGHT and action != LEFT:
+                elif a == RIGHT and action != RIGHT and action != LEFT:
                     probability -= inverse
                     transitions.append(((x + 1, y), inverse))
-        transitions.append((state, probability))
+
+        if optimal:
+            probability -= inverse
+            if action == UP:
+                transitions.append(((x, y - 1), probability))
+            elif action == DOWN:
+                transitions.append(((x, y + 1), probability))
+            elif action == LEFT:
+                transitions.append(((x - 1, y), probability))
+            elif action == RIGHT:
+                transitions.append(((x + 1, y), probability))
+            transitions.append((state, inverse))
+        else:
+            transitions.append((state, probability))
 
         return transitions
 
