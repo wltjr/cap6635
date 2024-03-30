@@ -145,8 +145,9 @@ class ValueIteration():
             value = 0.0
             for next_state,probability in mdp.transitions(state, action):
                 value += probability * \
-                         ((mdp.grid[state[1]][state[0]] + \
+                         ((mdp.grid[next_state[1]][next_state[0]] + \
                           mdp.discount_factor * U[next_state[1]][next_state[0]]))
+
             values.append(value)
 
         if len(values) == 0:
