@@ -154,38 +154,6 @@ class ValueIteration():
             return U[state[1]][state[0]]
         return max(values)
 
-    def reward(self, state, action):
-        """
-        reward utility function produces a reward for moving from current state to
-        the next based on the action.
-
-        :param state        the current state represented as a tuple (x,y)
-        :param action       the action for the current state that leads to the next
-
-        :return reward      the reward for the action leading to the next state
-        """
-        reward = 0
-        x, y = state
-
-        # get reward above, if action up and y > 0
-        if action == UP and y > 0:
-            reward = self.mdp.grid[y-1][x]
-
-        # get reward below, if action down and y < dim
-        elif action == DOWN and y < self.mdp.dim - 1:
-            reward = self.mdp.grid[y+1][x]
-
-        # get reward left, if action left and x > 0
-        elif action == LEFT and x > 0:
-            reward = self.mdp.grid[y][x-1]
-
-        # get reward right, if action right and x < dim
-        elif action == RIGHT and x < self.mdp.dim - 1:
-            reward = self.mdp.grid[y][x+1]
-
-        return reward
-
-
 def displayPolicy(terminal, dim, policy):
     """
     Display a policy converting numeric values into one U, D, L, R actions
