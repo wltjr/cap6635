@@ -20,7 +20,6 @@ class MDP():
         self.grid = grid
         self.dim = len(grid)
         self.states = []
-        self.Rmax = grid[terminal[1]][terminal[0]]
         self.terminal = terminal
         # memoize state actions
         for y in range(self.dim):
