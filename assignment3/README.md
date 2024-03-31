@@ -6,7 +6,7 @@ Process (MDP) to create a policy by using Value Iteration algorithm, using four
 unique R values, -100, -3, 0, and 3, and producing a policy consisting of
 ←, →, ↑, and ↓ actions for each R value.
 
-![Program screenshot](https://github.com/wltjr/cap6635/assets/12835340/943fb4a4-6747-44fa-88a9-fcd1771addcc)
+![Program screenshot](https://github.com/wltjr/cap6635/blob/master/assignment3/screenshot.jpg)
 
 ## System Requirements
 The following software is required for proper operation
