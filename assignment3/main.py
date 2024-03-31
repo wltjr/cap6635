@@ -154,35 +154,6 @@ class ValueIteration():
             return U[state[1]][state[0]]
         return max(values, key=lambda value: value[0])
 
-def displayPolicy(terminal, dim, policy):
-    """
-    Display a policy converting numeric values into one U, D, L, R actions
-
-    :param terminal     the terminal state represented as a tuple (x,y)
-    :param dim          the policy/grid dimensions
-    :param policy       a policy, vector of utility values for each state
-    """
-    display = [[0 for _ in range(dim)] for _ in range(dim)]
-    for y in range(dim):
-        for x in range(dim):
-            if (x,y) == terminal:
-                display[y][x] = 'G'
-                continue
-
-            values = []
-            if y > 0:                   # if y > 0 add action move up
-                values.append((policy[y-1][x], "↑"))
-            if y < dim - 1:          # if y < dim add action move down
-                values.append((policy[y+1][x], "↓"))
-            if x > 0:                   # if x > 0 add action move left
-                values.append((policy[y][x-1], "←"))
-            if x < dim - 1:          # if x < dim add action move right
-                values.append((policy[y][x+1], "→"))
-
-            display[y][x] = sorted(values, key=lambda x: x[0], reverse=True)[0][1]
-
-    for i in range(dim):
-        print(display[i])
 
 def getArrow(action):
     """
