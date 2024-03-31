@@ -4,12 +4,14 @@
 Assignment 3 is a command line 3 x 3 grid world modeled as a Markov Decision
 Process (MDP) to create a policy by using Value Iteration algorithm, using four
 unique R values, -100, -3, 0, and 3, and producing a policy consisting of
-L, R, U, and D actions for each R value.
+←, →, ↑, and ↓ actions for each R value.
+
+![Program screenshot](https://github.com/wltjr/cap6635/assets/12835340/943fb4a4-6747-44fa-88a9-fcd1771addcc)
 
 ## System Requirements
 The following software is required for proper operation
 
-  [Python >= 3.11](https://www.python.org/downloads/)  
+  [Python >= 3.11](https://www.python.org/downloads/)
 
 ## Installation
 Installation is not required for usage and operation of the program,
