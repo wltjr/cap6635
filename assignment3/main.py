@@ -182,21 +182,24 @@ def main():
     for r in R:
         world = [[r, -1 , 10, ], [-1, -1, -1], [-1, -1, -1]]
         dim = len(world)
-        print("-" * 12 + " R = " + str(r) + " " + "-" * 12)
-        print("Reward table:")
-        for i in range(dim):
-            print(world[i])
+        line = 64
+        r_str = " R = " + str(r) + " "
+        dashes = "-" * int(line/2 - len(r_str)/2)
+        print(dashes + r_str + dashes)
+        print("  Reward table:           Numeric policy:          Arrow Policy:")
         mdp = MDP(world, terminal, discountFactor)
-        print("\nNumeric policy:                 Arrow Policy:")
         policy = ValueIteration(mdp)
         policy[terminal[1]][terminal[0]] = (world[terminal[1]][terminal[0]], 'G')
         for y in range(dim):
             for x in range(dim):
-                print("%6.2f  " % (policy[y][x][0],), end='')
+                print("%4d  " % (world[y][x]), end='')
+            print("    ", end='')
             for x in range(dim):
-                print("\t%s" % (getArrow(policy[y][x][1])), end='')
+                print("%6.2f  " % (policy[y][x][0]), end='')
+            for x in range(dim):
+                print("%6s" % (getArrow(policy[y][x][1])), end='')
             print()
-        print("-" * 32 + "\n")
+        print("-" * line + "\n")
 
 
 
