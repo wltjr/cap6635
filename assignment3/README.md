@@ -29,4 +29,6 @@ When that command is run the program will start with prompts in the same
 terminal window.
 
 ## Operation and Usage
-Proper operation and usage requires...
+Proper operation and usage simply requires running as previously mentioned,
+there are no command line arguments or options, everything is hard coded,
+and output will be displayed in tables in tabular format.
