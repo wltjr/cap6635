@@ -113,7 +113,7 @@ class ValueIteration():
 
         :return U           a policy, vector of utility values for each state
         """
-        U_prime = [[0 for _ in range(mdp.dim)] for _ in range(mdp.dim)]
+        U_prime = [[ (0,"") for _ in range(mdp.dim)] for _ in range(mdp.dim)]
         self.mdp = mdp
         sigma_gamma = maxError * (1 - mdp.discount_factor) / mdp.discount_factor
 
@@ -122,8 +122,8 @@ class ValueIteration():
             maxChange = 0.0
 
             for state in mdp.states:
-                U_prime[state[1]][state[0]] = round(self.maxQValue(self, mdp, state, U), 4)
-                maxChange = max(abs(U_prime[state[1]][state[0]] - U[state[1]][state[0]]), maxChange)
+                U_prime[state[1]][state[0]] = self.maxQValue(self, mdp, state, U)
+                maxChange = max(abs(U_prime[state[1]][state[0]][0] - U[state[1]][state[0]][0]), maxChange)
 
             if maxChange <= sigma_gamma:
                 return U
@@ -146,13 +146,13 @@ class ValueIteration():
             for next_state,probability in mdp.transitions(state, action):
                 value += probability * \
                          ((mdp.grid[next_state[1]][next_state[0]] + \
-                          mdp.discount_factor * U[next_state[1]][next_state[0]]))
+                          mdp.discount_factor * U[next_state[1]][next_state[0]][0]))
 
-            values.append(value)
+            values.append((value,action))
 
         if len(values) == 0:
             return U[state[1]][state[0]]
-        return max(values)
+        return max(values, key=lambda value: value[0])
 
 def displayPolicy(terminal, dim, policy):
     """
@@ -184,6 +184,24 @@ def displayPolicy(terminal, dim, policy):
     for i in range(dim):
         print(display[i])
 
+def getArrow(action):
+    """
+    Converts numeric direction values to arrow characters or G for goal/terminal
+
+    :param action       the action to be converted to arrow character
+
+    :return arrow       a arrow character or G for goal/terminal state
+    """
+    if action == UP:
+        return ("↑")
+    elif action == DOWN:
+        return ("↓")
+    elif action == LEFT:
+        return ("←")
+    elif action == RIGHT:
+        return ("→")
+    else:
+        return "G"
 
 def main():
     discountFactor = 0.99
@@ -198,13 +216,15 @@ def main():
         for i in range(dim):
             print(world[i])
         mdp = MDP(world, terminal, discountFactor)
-        print("\nNumeric policy:")
+        print("\nNumeric policy:                 Arrow Policy:")
         policy = ValueIteration(mdp)
-        policy[terminal[1]][terminal[0]] = world[terminal[1]][terminal[0]]
-        for i in range(dim):
-            print(policy[i])
-        print("\nArrow policy:")
-        displayPolicy(terminal, dim, policy)
+        policy[terminal[1]][terminal[0]] = (world[terminal[1]][terminal[0]], 'G')
+        for y in range(dim):
+            for x in range(dim):
+                print("%6.2f  " % (policy[y][x][0],), end='')
+            for x in range(dim):
+                print("\t%s" % (getArrow(policy[y][x][1])), end='')
+            print()
         print("-" * 32 + "\n")
 
 
