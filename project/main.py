@@ -4,7 +4,7 @@ Random Informed RRT* path planning with random new obstacle
 """
 
 from informed_rrt_star import InformedRRTStar
-from tkinter import Button, Entry, Frame, Label, LEFT, RIGHT, TOP, X
+from tkinter import Button, Checkbutton, Entry, Frame, IntVar, Label, LEFT, RIGHT, TOP, X
 
 import matplotlib.pyplot as plt
 import matplotlib
@@ -48,9 +48,15 @@ class ui:
         frame_input = Frame(frame)
         frame_input.pack()
 
-        Label(frame_input,text="Collision Size").grid(row=0, column=0, padx=5, pady=5)
+        self.animate = IntVar()
+        Label(frame_input,text="Animate").grid(row=0, column=0, padx=5, pady=5)
+        animate_chkbtn = Checkbutton(frame_input, variable=self.animate)
+        animate_chkbtn.grid(row=0, column=1, padx=5, pady=5)
+
+        Label(frame_input,text="Collision Size").grid(row=0, column=2, padx=5, pady=5)
         self.collision_size = Entry(frame_input)
-        self.collision_size.grid(row=0, column=1, padx=5, pady=5)
+        self.collision_size.grid(row=0, column=3, padx=5, pady=5)
+
 
         # run button
         btn_dijkstra = Button(root, text='Run', command=self.run)
@@ -112,7 +118,7 @@ class ui:
                                   goal=goal,
                                   obstacle_list=obstacle_list,
                                   rand_area=[range_min, range_max])
-            path = rrt.informed_rrt_star_search(animation=False)
+            path = rrt.informed_rrt_star_search(animation=self.animate.get())
 
         inner_path = path[2:-1]
         inner_len = len(inner_path) - 1
@@ -130,6 +136,8 @@ class ui:
         plt.plot([x for (x, y) in path], [y for (x, y) in path], '-r')
         plt.grid(True)
         plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=30 * size)
+        if self.animate.get():
+            plt.pause(0.01)
         plt.show()
 
 
