@@ -54,9 +54,14 @@ class ui:
         animate_chkbtn = Checkbutton(frame_input, variable=self.animate)
         animate_chkbtn.grid(row=0, column=1, padx=5, pady=5)
 
-        Label(frame_input,text="Collision Size").grid(row=0, column=2, padx=5, pady=5)
+        self.animate_full = IntVar()
+        Label(frame_input,text="Full").grid(row=0, column=2, padx=5, pady=5)
+        animate_full_chkbtn = Checkbutton(frame_input, variable=self.animate_full)
+        animate_full_chkbtn.grid(row=0, column=3, padx=5, pady=5)
+
+        Label(frame_input,text="Collision Size").grid(row=0, column=4, padx=5, pady=5)
         self.collision_size = Entry(frame_input)
-        self.collision_size.grid(row=0, column=3, padx=5, pady=5)
+        self.collision_size.grid(row=0, column=5, padx=5, pady=5)
 
 
         # run button
@@ -119,7 +124,8 @@ class ui:
                                   goal=goal,
                                   obstacle_list=obstacle_list,
                                   rand_area=[range_min, range_max])
-            self.path = path = rrt.informed_rrt_star_search(animation=self.animate.get())
+            self.path = path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
+                                                                       self.animate_full.get()))
 
         inner_path = path[2:-1]
         inner_len = len(inner_path) - 1
