@@ -102,7 +102,9 @@ class ui:
         """
         Reset form fields
         """
+        plt.clf()
         self.setEntry(self.collision_size, "")
+        plt.show()
 
     def run(self):
 
