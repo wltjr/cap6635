@@ -6,7 +6,6 @@ Random Informed RRT* path planning with random new obstacle
 from informed_rrt_star import InformedRRTStar
 from tkinter import Button, Checkbutton, Entry, Frame, IntVar, Label, LEFT, RIGHT, TOP, X
 
-import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import matplotlib
 import random
@@ -126,7 +125,7 @@ class ui:
                                   goal=goal,
                                   obstacle_list=obstacle_list,
                                   rand_area=[range_min, range_max])
-            self.path = path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
+            path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
                                                                        self.animate_full.get()))
 
         inner_path = path[2:-1]
@@ -144,24 +143,17 @@ class ui:
         rrt.draw_graph()
         plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=30 * size)
         if self.animate.get():
-            self.path.reverse()
-            ani = animation.FuncAnimation(fig=plt.figure(1),
-                                          func=self.drawPath,
-                                          frames=len(path) - 1,
-                                          interval=1000,
-                                          repeat=True)
+            path_len = len(path) - 1
+            path.reverse()
+            for i in range(path_len):
+                plt.plot([path[i][0], path[i+1][0]],
+                         [path[i][1], path[i+1][1]], '-r')
+                plt.pause(1)
         else:
             plt.plot([x for (x, y) in self.path], [y for (x, y) in self.path], '-r')
 
         plt.show()
 
-
-    def drawPath(self, i):
-        """
-        Draw the path the robot will walk
-        """
-        plt.plot([self.path[i][0], self.path[i+1][0]],
-                 [self.path[i][1], self.path[i+1][1]], '-r')
 
 
 if __name__ == '__main__':
