@@ -68,7 +68,7 @@ class ui:
         btn_dijkstra.pack(side=LEFT, padx=5, pady=5)
 
         # quit button
-        btn_quit = Button(root, text='Quit', command=root.quit)
+        btn_quit = Button(root, text='Quit', command=plt.close)
         btn_quit.pack(side=RIGHT, padx=5, pady=5)
 
         # reset button
