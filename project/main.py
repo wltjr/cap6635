@@ -3,6 +3,7 @@ Random Informed RRT* path planning with random new obstacle
 
 """
 
+from bug import BugPlanner
 from informed_rrt_star import InformedRRTStar
 from tkinter import Button, Checkbutton, Entry, Frame, IntVar, Label, LEFT, RIGHT, TOP, X
 
@@ -107,6 +108,7 @@ class ui:
 
     def run(self):
 
+        start = (0,0)
         path = None
 
         while path is None:
@@ -121,7 +123,7 @@ class ui:
             # Set params
             goal = [random.randrange(random.randrange(int(range_max/5), int(range_max/1.75)), range_max),
                     random.randrange(random.randrange(int(range_max/5), int(range_max/1.75)), range_max)]
-            rrt = InformedRRTStar(start=[0, 0],
+            rrt = InformedRRTStar(start=start,
                                   goal=goal,
                                   obstacle_list=obstacle_list,
                                   rand_area=[range_min, range_max])
@@ -135,6 +137,8 @@ class ui:
             new_obstacle = random.choice(inner_path)
         for i in range(inner_len):
             if inner_path[i] == new_obstacle:
+                start = (int(inner_path[i][0]), int(inner_path[i][1]))
+                goal = (int(inner_path[i+1][0]), int(inner_path[i+1][1]))
                 new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
                                 (inner_path[i][1] + inner_path[i+1][1])/2)
         size = random.uniform(radius_min, radius_max/2)
@@ -151,6 +155,10 @@ class ui:
                 plt.pause(1)
         else:
             plt.plot([x for (x, y) in self.path], [y for (x, y) in self.path], '-r')
+
+        print(start, goal, new_obstacle)
+        my_Bug = BugPlanner(start[0], start[1], goal[0], goal[1], [new_obstacle[0]], [new_obstacle[1]])
+        my_Bug.bug2()
 
         plt.show()
 
