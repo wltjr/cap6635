@@ -286,12 +286,12 @@ class InformedRRTStar:
             if node.parent is not None:
                 if node.x or node.y is not None:
                     plt.plot([node.x, self.node_list[node.parent].x],
-                             [node.y, self.node_list[node.parent].y], "-g")
+                             [node.y, self.node_list[node.parent].y], color='lightgray')
 
         for (ox, oy, size) in self.obstacle_list:
             plt.plot(ox, oy, "ok", ms=30 * size)
 
-        plt.plot(self.start.x, self.start.y, "xr")
+        plt.plot(self.start.x, self.start.y, "og")
         plt.plot(self.goal.x, self.goal.y, "xr")
         plt.axis([self.min_rand, self.max_rand, self.min_rand, self.max_rand])
         plt.grid(True)
