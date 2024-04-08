@@ -147,7 +147,7 @@ class ui:
             path.reverse()
             for i in range(path_len):
                 plt.plot([path[i][0], path[i+1][0]],
-                         [path[i][1], path[i+1][1]], '-r')
+                         [path[i][1], path[i+1][1]], linestyle='dashed', color='yellow')
                 plt.pause(1)
         else:
             plt.plot([x for (x, y) in self.path], [y for (x, y) in self.path], '-r')
