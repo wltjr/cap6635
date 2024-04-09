@@ -131,7 +131,9 @@ class ui:
             rrt = InformedRRTStar(start=start,
                                   goal=goal,
                                   obstacle_list=obstacle_list,
-                                  rand_area=[range_min, range_max])
+                                  rand_area=[range_min, range_max],
+                                  expand_dis=1,
+                                  goal_sample_rate=20)
             path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
                                                                        self.animate_full.get()))
 
