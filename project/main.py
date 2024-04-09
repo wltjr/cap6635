@@ -7,6 +7,7 @@ from bug import BugPlanner
 from informed_rrt_star import InformedRRTStar
 from tkinter import Button, Checkbutton, Entry, Frame, IntVar, Label, LEFT, RIGHT, TOP, X
 
+import math
 import matplotlib.pyplot as plt
 import matplotlib
 import random
@@ -146,11 +147,11 @@ class ui:
                 goal = (int(inner_path[i+1][0]), int(inner_path[i+1][1]))
                 new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
                                 (inner_path[i][1] + inner_path[i+1][1])/2)
-        size = random.uniform(radius_min, radius_max/2)
+        radius = random.uniform(radius_min, radius_max/2)
 
         # Plot path and new obstacle
         rrt.draw_graph()
-        plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=30 * size)
+        plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=30 * radius)
         if self.animate.get():
             path_len = len(path) - 1
             for i in range(path_len):
@@ -160,8 +161,19 @@ class ui:
         else:
             plt.plot([x for (x, y) in self.path], [y for (x, y) in self.path], '-r')
 
-        print(start, goal, new_obstacle)
-        my_Bug = BugPlanner(start[0], start[1], goal[0], goal[1], [new_obstacle[0]], [new_obstacle[1]])
+        # store all points of new obstacle diameter
+        degrees = 0
+        obstacle_x = []
+        obstacle_y = []
+        while degrees <= 360:
+            angle = degrees * ( math.pi / 180 )
+            obstacle_x.append(new_obstacle[0] + radius * math.cos(angle))
+            obstacle_y.append(new_obstacle[1] + radius * math.sin(angle))
+            degrees += 1
+
+        my_Bug = BugPlanner(start[0], start[1],
+                            goal[0], goal[1],
+                            obstacle_x, obstacle_y)
         my_Bug.bug2()
 
         plt.show()
