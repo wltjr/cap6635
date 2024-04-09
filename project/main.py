@@ -14,11 +14,15 @@ import sys
 
 matplotlib.use('TkAgg')
 
+goal_min = 10
+
 range_min = -2
-range_max = 25
+range_max = 50
+
+obstacle_min = 5
 
 radius_min = 0.5
-radius_max = 2
+radius_max = 1.25
 
 class ui:
     """
@@ -116,13 +120,13 @@ class ui:
             # create random obstacles
             obstacle_list = []
             for n in range(10):
-                obstacle_list.append((random.randrange(range_min, range_max),
-                                    random.randrange(range_min, range_max),
+                obstacle_list.append((random.randrange(obstacle_min, range_max),
+                                    random.randrange(obstacle_min, range_max),
                                     random.uniform(radius_min, radius_max)))
 
             # Set params
-            goal = [random.randrange(random.randrange(int(range_max/5), int(range_max/1.75)), range_max),
-                    random.randrange(random.randrange(int(range_max/5), int(range_max/1.75)), range_max)]
+            goal = [random.randrange(random.randrange(goal_min, range_max), range_max),
+                    random.randrange(random.randrange(goal_min, range_max), range_max)]
             rrt = InformedRRTStar(start=start,
                                   goal=goal,
                                   obstacle_list=obstacle_list,
@@ -130,7 +134,8 @@ class ui:
             path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
                                                                        self.animate_full.get()))
 
-        inner_path = path[2:-1]
+        path.reverse()
+        inner_path = path[2:-2]
         inner_len = len(inner_path) - 1
         new_obstacle = random.choice(inner_path)
         while new_obstacle in obstacle_list:
@@ -148,7 +153,6 @@ class ui:
         plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=30 * size)
         if self.animate.get():
             path_len = len(path) - 1
-            path.reverse()
             for i in range(path_len):
                 plt.plot([path[i][0], path[i+1][0]],
                          [path[i][1], path[i+1][1]], linestyle='dashed', color='yellow')
