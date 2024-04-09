@@ -53,7 +53,7 @@ class ui:
         frame_input = Frame(frame)
         frame_input.pack()
 
-        self.animate = IntVar()
+        self.animate = IntVar(value=1)
         Label(frame_input,text="Animate").grid(row=0, column=0, padx=5, pady=5)
         animate_chkbtn = Checkbutton(frame_input, variable=self.animate)
         animate_chkbtn.grid(row=0, column=1, padx=5, pady=5)
