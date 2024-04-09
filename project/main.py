@@ -153,6 +153,7 @@ class ui:
 
         # Plot path and new obstacle
         rrt.draw_graph()
+        plt.title("IRRT*")
         plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=30 * radius)
         if self.animate.get():
             path_len = len(path) - 1
@@ -167,6 +168,7 @@ class ui:
         degrees = 0
         obstacle_x = []
         obstacle_y = []
+        radius *= 3
         while degrees <= 360:
             angle = degrees * ( math.pi / 180 )
             obstacle_x.append(new_obstacle[0] + radius * math.cos(angle))
