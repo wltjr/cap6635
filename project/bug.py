@@ -206,9 +206,9 @@ class BugPlanner:
         mov_dir = 'normal'
         cand_x, cand_y = -np.inf, -np.inf
         if show_animation:
-            plt.plot(self.obs_x, self.obs_y, ".k")
+            plt.plot(self.obs_x, self.obs_y, color="magenta")
             plt.plot(self.r_x[-1], self.r_y[-1], "og")
-            plt.plot(self.goal_x, self.goal_y, "xb")
+            plt.plot(self.goal_x, self.goal_y, "og")
             plt.plot(self.out_x, self.out_y, ".")
 
         straight_x, straight_y = [self.r_x[-1]], [self.r_y[-1]]
@@ -268,7 +268,7 @@ class BugPlanner:
                         mov_dir = 'normal'
                         break
             if show_animation:
-                plt.plot(self.r_x, self.r_y, "-r")
+                plt.plot(self.r_x, self.r_y, linestyle='dashed', color='orange')
                 plt.pause(0.001)
         if show_animation:
             plt.show()
