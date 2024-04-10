@@ -22,8 +22,8 @@ range_max = 50
 
 obstacle_min = 5
 
-radius_min = 0.5
-radius_max = 1.25
+radius_min = 1
+radius_max = 2
 
 class ui:
     """
@@ -149,7 +149,7 @@ class ui:
                 goal = (int(inner_path[i+1][0]), int(inner_path[i+1][1]))
                 new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
                                 (inner_path[i][1] + inner_path[i+1][1])/2)
-        radius = random.uniform(radius_min, radius_max/2)
+        radius = random.uniform(radius_min, radius_max)
 
         # Plot path and new obstacle
         rrt.draw_graph()
