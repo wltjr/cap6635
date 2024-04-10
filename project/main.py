@@ -145,8 +145,8 @@ class ui:
             new_obstacle = random.choice(inner_path)
         for i in range(inner_len):
             if inner_path[i] == new_obstacle:
-                start = (int(inner_path[i][0]), int(inner_path[i][1]))
-                goal = (int(inner_path[i+1][0]), int(inner_path[i+1][1]))
+                start = (inner_path[i][0], inner_path[i][1])
+                goal = (inner_path[i+1][0], inner_path[i+1][1])
                 new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
                                 (inner_path[i][1] + inner_path[i+1][1])/2)
         radius = random.uniform(radius_min, radius_max)
@@ -175,10 +175,32 @@ class ui:
             obstacle_y.append(new_obstacle[1] + radius * math.sin(angle))
             degrees += 1
 
-        my_Bug = BugPlanner(start[0], start[1],
-                            goal[0], goal[1],
-                            obstacle_x, obstacle_y)
-        my_Bug.bug2()
+        plt.title("IRRT* + Tangent Bug*")
+        degrees = 270
+        obstacle_x.clear()
+        obstacle_y.clear()
+        radius += 1
+        plot = False
+        m = round((start[1] - goal[1]) / (start[0] - goal[0]), 3)
+        while degrees >= 0:
+            angle = degrees * ( math.pi / 180 )
+            x = new_obstacle[0] + radius * math.cos(angle)
+            y = new_obstacle[1] + radius * math.sin(angle)
+
+            if round((y - start[1]), 1) == round((m * (x - start[0])), 1):
+                plt.plot(x, y, "og")
+                if plot:
+                    break
+                else:
+                    plot = True
+
+            if plot:
+                obstacle_x.append(x)
+                obstacle_y.append(y)
+
+            degrees -= 1
+
+        plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='orange')
 
         plt.show()
 
