@@ -154,7 +154,6 @@ class ui:
         # Plot path and new obstacle
         rrt.draw_graph()
         plt.title("IRRT*")
-        plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=30 * radius)
         if self.animate.get():
             path_len = len(path) - 1
             for i in range(path_len):
@@ -163,6 +162,8 @@ class ui:
                 plt.pause(1)
         else:
             plt.plot([x for (x, y) in self.path], [y for (x, y) in self.path], '-r')
+
+        plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=30 * radius)
 
         # store all points of new obstacle diameter
         degrees = 0
@@ -188,7 +189,7 @@ class ui:
             y = new_obstacle[1] + radius * math.sin(angle)
 
             if round((y - start[1]), 1) == round((m * (x - start[0])), 1):
-                plt.plot(x, y, "og")
+                plt.plot(x, y, "o", color='orange')
                 if plot:
                     break
                 else:
