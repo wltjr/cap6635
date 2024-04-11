@@ -182,11 +182,17 @@ class ui:
         obstacle_y.clear()
         radius += 1
         plot = False
+        goal_dist = math.dist(goal, path[-1])
         m = round((start[1] - goal[1]) / (start[0] - goal[0]), 3)
         while degrees >= 0:
             angle = degrees * ( math.pi / 180 )
             x = new_obstacle[0] + radius * math.cos(angle)
             y = new_obstacle[1] + radius * math.sin(angle)
+
+            if math.dist((x,y), path[-1]) < goal_dist:
+                obstacle_x.append(path[-1][0])
+                obstacle_y.append(path[-1][1])
+                break
 
             if round((y - start[1]), 1) == round((m * (x - start[0])), 1):
                 plt.plot(x, y, "o", color='orange')
