@@ -114,7 +114,11 @@ class ui:
         """
         Reset form fields
         """
+        self.obstacle_list.clear()
         plt.clf()
+        plt.xlim(range_min, range_max)
+        plt.ylim(range_min, range_max)
+        plt.grid(True)
         self.setEntry(self.collision_size, "")
         plt.show()
 
