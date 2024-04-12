@@ -250,7 +250,7 @@ class InformedRRTStar:
         for (ox, oy, size) in self.obstacle_list:
             dd = self.distance_squared_point_to_segment(
                 np.array([x1, y1]), np.array([x2, y2]), np.array([ox, oy]))
-            if dd <= size ** 2 * 10:
+            if dd <= size ** 2 * 50:
                 return False  # collision
         return True
 
@@ -289,7 +289,7 @@ class InformedRRTStar:
                              [node.y, self.node_list[node.parent].y], color='lightgray')
 
         for (ox, oy, size) in self.obstacle_list:
-            plt.plot(ox, oy, "ok", ms=30 * size)
+            plt.plot(ox, oy, "ok", ms=15 * size)
 
         plt.plot(self.start.x, self.start.y, "og")
         plt.plot(self.goal.x, self.goal.y, "xr")
