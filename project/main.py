@@ -122,37 +122,53 @@ class ui:
         self.setEntry(self.collision_size, "")
         plt.show()
 
-    def run(self):
 
-        start = (0,0)
+    def run(self):
+        self.obstacle_list = []
+        self.goal = []
+        count = random.randrange(1, 5) - 1
+        x,y = self.irrtStarWithTangentBugStar()
+        print("new obstacles = ", count + 1)
+        for _ in range(count):
+            x,y = self.irrtStarWithTangentBugStar((x,y),False)
+
+
+    def irrtStarWithTangentBugStar(self, start=(0,0), create=True):
+        """
+        Clear and set new text for a entry field
+
+        :param start                the start coordinates
+        :param create               create random obstacles and goal before running IRRT*
+        """
         path = None
 
         while path is None:
-            print("Random IRRT* planning attempt")
-            # create random obstacles
-            obstacle_list = []
-            for n in range(obstacles):
-                obstacle_list.append((random.randrange(obstacle_min, range_max),
-                                    random.randrange(obstacle_min, range_max),
-                                    random.uniform(radius_min, radius_max)))
+            plt.title("Random IRRT* planning attempt")
+            if create:
+                self.obstacle_list.clear()
+                # create random obstacles
+                for n in range(obstacles):
+                    self.obstacle_list.append((random.randrange(obstacle_min, range_max),
+                                               random.randrange(obstacle_min, range_max),
+                                               random.uniform(radius_min, radius_max)))
+                # Set params
+                self.goal = [random.randrange(random.randrange(goal_min, range_max), range_max),
+                             random.randrange(random.randrange(goal_min, range_max), range_max)]
 
-            # Set params
-            goal = [random.randrange(random.randrange(goal_min, range_max), range_max),
-                    random.randrange(random.randrange(goal_min, range_max), range_max)]
             rrt = InformedRRTStar(start=start,
-                                  goal=goal,
-                                  obstacle_list=obstacle_list,
+                                  goal=self.goal,
+                                  obstacle_list=self.obstacle_list,
                                   rand_area=[range_min, range_max],
                                   expand_dis=4,
                                   goal_sample_rate=20)
             path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
-                                                                       self.animate_full.get()))
+                                                           self.animate_full.get()))
 
         path.reverse()
-        inner_path = path[2:-2]
+        inner_path = path[2:5]
         inner_len = len(inner_path) - 1
         new_obstacle = random.choice(inner_path)
-        while new_obstacle in obstacle_list:
+        while new_obstacle in self.obstacle_list:
             new_obstacle = random.choice(inner_path)
         for i in range(inner_len):
             if inner_path[i] == new_obstacle:
@@ -182,7 +198,7 @@ class ui:
         obstacle_x = []
         obstacle_y = []
         radius *= 3
-        while degrees <= 360:
+        while degrees <= 270:
             x,y = Circle.coords(new_obstacle, radius, degrees)
             obstacle_x.append(x)
             obstacle_y.append(y - error)
@@ -190,21 +206,24 @@ class ui:
             error = Circle.getError(error, degrees)
 
         plt.title("IRRT* + Tangent Bug*")
-        degrees = 270
+        degrees = 360
         error = 0
+        x = 0
+        y = 0
         obstacle_x.clear()
         obstacle_y.clear()
         radius += 5
         plot = False
-        goal_dist = math.dist(goal, path[-1])
-        m = round((start[1] - goal[1]) / (start[0] - goal[0]), 3)
+        goal_dist = math.dist(self.goal, path[-1])
+        m = round((start[1] - self.goal[1]) / (start[0] - self.goal[0]), 3)
         while degrees >= 0:
             x,y = Circle.coords(new_obstacle, radius, degrees)
             # y -= error
 
             if math.dist((x,y), path[-1]) < goal_dist:
-                obstacle_x.append(path[-1][0])
-                obstacle_y.append(path[-1][1])
+                plt.plot(x, y, "o", color='orange')
+                obstacle_x.append(x)
+                obstacle_y.append(y)
                 break
 
             if round((y - start[1]), 1) == round((m * (x - start[0])), 1):
@@ -222,8 +241,10 @@ class ui:
             error = Circle.getError(error, degrees)
 
         plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='orange')
-
+        plt.pause(0.5)
         plt.show()
+        
+        return x,y
 
 
 
