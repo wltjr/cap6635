@@ -18,9 +18,10 @@ matplotlib.use('TkAgg')
 goal_min = 10
 
 range_min = -2
-range_max = 50
+range_max = 200
 
 obstacle_min = 5
+obstacles = 20
 
 radius_min = 1
 radius_max = 2
@@ -120,7 +121,7 @@ class ui:
             print("Random IRRT* planning attempt")
             # create random obstacles
             obstacle_list = []
-            for n in range(10):
+            for n in range(obstacles):
                 obstacle_list.append((random.randrange(obstacle_min, range_max),
                                     random.randrange(obstacle_min, range_max),
                                     random.uniform(radius_min, radius_max)))
@@ -132,7 +133,7 @@ class ui:
                                   goal=goal,
                                   obstacle_list=obstacle_list,
                                   rand_area=[range_min, range_max],
-                                  expand_dis=1,
+                                  expand_dis=4,
                                   goal_sample_rate=20)
             path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
                                                                        self.animate_full.get()))
@@ -159,11 +160,11 @@ class ui:
             for i in range(path_len):
                 plt.plot([path[i][0], path[i+1][0]],
                          [path[i][1], path[i+1][1]], linestyle='dashed', color='yellow')
-                plt.pause(1)
+                plt.pause(0.1)
         else:
             plt.plot([x for (x, y) in self.path], [y for (x, y) in self.path], '-r')
 
-        plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=30 * radius)
+        plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=10 * radius)
 
         # store all points of new obstacle diameter
         degrees = 0
