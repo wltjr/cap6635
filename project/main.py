@@ -5,6 +5,7 @@ Random Informed RRT* path planning with random new obstacle
 
 from bug import BugPlanner
 from informed_rrt_star import InformedRRTStar
+from shapes import Circle
 from tkinter import Button, Checkbutton, Entry, Frame, IntVar, Label, LEFT, RIGHT, TOP, X
 
 import math
@@ -173,27 +174,29 @@ class ui:
 
         # store all points of new obstacle diameter
         degrees = 0
+        error = 0
         obstacle_x = []
         obstacle_y = []
         radius *= 3
         while degrees <= 360:
-            angle = degrees * ( math.pi / 180 )
-            obstacle_x.append(new_obstacle[0] + radius * math.cos(angle))
-            obstacle_y.append(new_obstacle[1] + radius * math.sin(angle))
+            x,y = Circle.coords(new_obstacle, radius, degrees)
+            obstacle_x.append(x)
+            obstacle_y.append(y - error)
             degrees += 1
+            error = Circle.getError(error, degrees)
 
         plt.title("IRRT* + Tangent Bug*")
         degrees = 270
+        error = 0
         obstacle_x.clear()
         obstacle_y.clear()
-        radius += 1
+        radius += 5
         plot = False
         goal_dist = math.dist(goal, path[-1])
         m = round((start[1] - goal[1]) / (start[0] - goal[0]), 3)
         while degrees >= 0:
-            angle = degrees * ( math.pi / 180 )
-            x = new_obstacle[0] + radius * math.cos(angle)
-            y = new_obstacle[1] + radius * math.sin(angle)
+            x,y = Circle.coords(new_obstacle, radius, degrees)
+            # y -= error
 
             if math.dist((x,y), path[-1]) < goal_dist:
                 obstacle_x.append(path[-1][0])
@@ -212,6 +215,7 @@ class ui:
                 obstacle_y.append(y)
 
             degrees -= 1
+            error = Circle.getError(error, degrees)
 
         plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='orange')
 
