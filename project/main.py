@@ -17,7 +17,7 @@ matplotlib.use('TkAgg')
 
 goal_min = 10
 
-range_min = -2
+range_min = -5
 range_max = 200
 
 obstacle_min = 5
@@ -46,6 +46,11 @@ class ui:
         # add back to root
         navigationToolbar2Tk.pack(side=TOP, fill=X)
         canvas.pack(side=TOP, fill=X)
+
+        plt.xlim(range_min, range_max)
+        plt.ylim(range_min, range_max)
+        plt.grid(True)
+        plt.tight_layout()
 
         # add primary frame
         frame = Frame(root)
