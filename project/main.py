@@ -128,7 +128,6 @@ class ui:
         self.goal = []
         count = random.randrange(1, 5) - 1
         x,y = self.irrtStarWithTangentBugStar()
-        print("new obstacles = ", count + 1)
         for _ in range(count):
             x,y = self.irrtStarWithTangentBugStar((x,y),False)
 
@@ -206,7 +205,7 @@ class ui:
             error = Circle.getError(error, degrees)
 
         plt.title("IRRT* + Tangent Bug*")
-        degrees = 360
+        degrees = 180
         error = 0
         x = 0
         y = 0
@@ -215,7 +214,8 @@ class ui:
         radius += 5
         plot = False
         goal_dist = math.dist(self.goal, path[-1])
-        m = round((start[1] - self.goal[1]) / (start[0] - self.goal[0]), 3)
+        m = round((start[1] - goal[1]) / (start[0] - goal[0]), 4)
+        degrees += math.degrees(math.atan(m)) + 10
         while degrees >= 0:
             x,y = Circle.coords(new_obstacle, radius, degrees)
             # y -= error
@@ -237,7 +237,7 @@ class ui:
                 obstacle_x.append(x)
                 obstacle_y.append(y)
 
-            degrees -= 1
+            degrees -= 0.5
             error = Circle.getError(error, degrees)
 
         plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='orange')
