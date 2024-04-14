@@ -3,7 +3,6 @@ Random Informed RRT* path planning with random new obstacle
 
 """
 
-from bug import BugPlanner
 from informed_rrt_star import InformedRRTStar
 from shapes import Circle
 from tkinter import Button, Checkbutton, Entry, Frame, IntVar, Label, LEFT, RIGHT, TOP, X
@@ -177,7 +176,6 @@ class ui:
                 if inner_path[i] == new_obstacle:
                     start = (inner_path[i][0], inner_path[i][1])
                     goal = (inner_path[i+1][0], inner_path[i+1][1])
-                    print(" start = %s  goal = %s" % ( start, goal ))
                     new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
                                     (inner_path[i][1] + inner_path[i+1][1])/2)
             radius = random.uniform(radius_min, radius_max)
