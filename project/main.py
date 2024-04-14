@@ -242,7 +242,6 @@ class ui:
 
         plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='orange')
         plt.pause(0.5)
-        plt.show()
         
         return x,y
 
