@@ -130,14 +130,16 @@ class ui:
         x,y = self.irrtStarWithTangentBugStar()
         for _ in range(count):
             x,y = self.irrtStarWithTangentBugStar((x,y),False)
+        self.irrtStarWithTangentBugStar((x,y),False,False)
 
 
-    def irrtStarWithTangentBugStar(self, start=(0,0), create=True):
+    def irrtStarWithTangentBugStar(self, start=(0,0), create=True, bug=True):
         """
         Clear and set new text for a entry field
 
         :param start                the start coordinates
         :param create               create random obstacles and goal before running IRRT*
+        :param bug                  create a new obstacle and run bug algo
         """
         path = None
 
@@ -165,18 +167,20 @@ class ui:
 
         goal = self.goal
         path.reverse()
-        inner_path = path[2:5]
-        inner_len = len(inner_path) - 1
-        new_obstacle = random.choice(inner_path)
-        while new_obstacle in self.obstacle_list:
+        if bug:
+            inner_path = path[2:5]
+            inner_len = len(inner_path) - 1
             new_obstacle = random.choice(inner_path)
-        for i in range(inner_len):
-            if inner_path[i] == new_obstacle:
-                start = (inner_path[i][0], inner_path[i][1])
-                goal = (inner_path[i+1][0], inner_path[i+1][1])
-                new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
-                                (inner_path[i][1] + inner_path[i+1][1])/2)
-        radius = random.uniform(radius_min, radius_max)
+            while new_obstacle in self.obstacle_list:
+                new_obstacle = random.choice(inner_path)
+            for i in range(inner_len):
+                if inner_path[i] == new_obstacle:
+                    start = (inner_path[i][0], inner_path[i][1])
+                    goal = (inner_path[i+1][0], inner_path[i+1][1])
+                    print(" start = %s  goal = %s" % ( start, goal ))
+                    new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
+                                    (inner_path[i][1] + inner_path[i+1][1])/2)
+            radius = random.uniform(radius_min, radius_max)
 
         # Plot path and new obstacle
         rrt.draw_graph()
@@ -189,6 +193,9 @@ class ui:
                 plt.pause(0.1)
         else:
             plt.plot([x for (x, y) in self.path], [y for (x, y) in self.path], '-r')
+
+        if not bug:
+            return
 
         plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=10 * radius)
 
