@@ -163,6 +163,7 @@ class ui:
             path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
                                                            self.animate_full.get()))
 
+        goal = self.goal
         path.reverse()
         inner_path = path[2:5]
         inner_len = len(inner_path) - 1
