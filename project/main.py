@@ -126,10 +126,14 @@ class ui:
         self.obstacle_list = []
         self.goal = []
         count = random.randrange(1, 5) - 1
-        x,y = self.irrtStarWithTangentBugStar()
-        for _ in range(count):
-            x,y = self.irrtStarWithTangentBugStar((x,y),False)
-        self.irrtStarWithTangentBugStar((x,y),False,False)
+        x_y = self.irrtStarWithTangentBugStar()
+        if x_y != None:
+            for _ in range(count):
+                x,y = x_y
+                x_y = self.irrtStarWithTangentBugStar((x,y),False)
+                if x_y == None:
+                    return
+            self.irrtStarWithTangentBugStar((x,y),False,False)
 
 
     def irrtStarWithTangentBugStar(self, start=(0,0), create=True, bug=True):
