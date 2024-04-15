@@ -170,7 +170,6 @@ class ui:
 
         if len(path) < 10:
             bug = False
-            return start
 
         goal = self.goal
         path.reverse()
