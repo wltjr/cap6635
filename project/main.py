@@ -125,7 +125,7 @@ class ui:
     def run(self):
         self.obstacle_list = []
         self.goal = []
-        count = random.randrange(1, 5) - 1
+        count = random.randrange(1, 5)
         x_y = self.irrtStarWithTangentBugStar()
         if x_y != None:
             for _ in range(count):
