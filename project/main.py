@@ -219,7 +219,6 @@ class ui:
 
         plt.title("IRRT* + Tangent Bug*")
         degrees = 180
-        error = 0
         x = 0
         y = 0
         obstacle_x.clear()
@@ -231,7 +230,6 @@ class ui:
         degrees += math.degrees(math.atan(m)) + 10
         while degrees >= 0:
             x,y = Circle.coords(new_obstacle, radius, degrees)
-            # y -= error
 
             if math.dist((x,y), path[-1]) < goal_dist:
                 plt.plot(x, y, "o", color='orange')
@@ -251,7 +249,6 @@ class ui:
                 obstacle_y.append(y)
 
             degrees -= 0.5
-            error = Circle.getError(error, degrees)
 
         plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='orange')
         plt.pause(0.5)
