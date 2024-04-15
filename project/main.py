@@ -173,9 +173,9 @@ class ui:
         if bug:
             inner_path = path[2:5]
             inner_len = len(inner_path) - 1
-            new_obstacle = random.choice(inner_path)
+            new_obstacle = random.choice(inner_path[:-1])
             while new_obstacle in self.obstacle_list:
-                new_obstacle = random.choice(inner_path)
+                new_obstacle = random.choice(inner_path[:-1])
             for i in range(inner_len):
                 if inner_path[i] == new_obstacle:
                     start = (inner_path[i][0], inner_path[i][1])
