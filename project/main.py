@@ -207,7 +207,7 @@ class ui:
         obstacle_x = []
         obstacle_y = []
         radius *= 3
-        while degrees <= 270:
+        while degrees <= 360:
             x,y = Circle.coords(new_obstacle, radius, degrees)
             obstacle_x.append(x)
             obstacle_y.append(y - error)
