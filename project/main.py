@@ -164,6 +164,10 @@ class ui:
             path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
                                                            self.animate_full.get()))
 
+        if len(path) < 10:
+            bug = False
+            return start
+
         goal = self.goal
         path.reverse()
         if bug:
