@@ -151,76 +151,16 @@ class ui:
         self.output_text.insert(END, "done\n")
 
 
-    def irrtStarWithTangentBugStar(self, start=(0,0), create=True, bug=True):
+    def bugCircleObstacle(self, new_obstacle, start, goal, path):
         """
-        Clear and set new text for a entry field
+        Run Bug 2/Tangent Bug algorithm against a circle obstacle
 
+        :param start                the new obstacle coordinates, center x,y
         :param start                the start coordinates
-        :param create               create random obstacles and goal before running IRRT*
-        :param bug                  create a new obstacle and run bug algo
+        :param start                the goal coordinates
+        :param start                the current path
         """
-        path = None
-
-        while path is None:
-            plt.title("Random IRRT* planning attempt")
-            if create:
-                self.obstacle_list.clear()
-                # create random obstacles
-                for n in range(obstacles):
-                    self.obstacle_list.append((random.randrange(obstacle_min, range_max),
-                                               random.randrange(obstacle_min, range_max),
-                                               random.uniform(radius_min, radius_max)))
-                # Set params
-                self.goal = [random.randrange(random.randrange(goal_min, range_max), range_max),
-                             random.randrange(random.randrange(goal_min, range_max), range_max)]
-
-            rrt = InformedRRTStar(start=start,
-                                  goal=self.goal,
-                                  obstacle_list=self.obstacle_list,
-                                  rand_area=[range_min, range_max],
-                                  expand_dis=4,
-                                  goal_sample_rate=20)
-            path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
-                                                           self.animate_full.get()))
-
-        if len(path) < 10:
-            bug = False
-
-        goal = self.goal
-        path.reverse()
-        self.output_text.insert(END, "IRRT* path len = %d\n" % (len(path)))
-        if bug:
-            inner_path = path[2:5]
-            inner_len = len(inner_path) - 1
-            new_obstacle = random.choice(inner_path[:-1])
-            while new_obstacle in self.obstacle_list:
-                new_obstacle = random.choice(inner_path[:-1])
-            for i in range(inner_len):
-                if inner_path[i] == new_obstacle:
-                    start = (inner_path[i][0], inner_path[i][1])
-                    goal = (inner_path[i+1][0], inner_path[i+1][1])
-                    self.output_text.insert(END, "start = %s  goal = %s\n" % 
-                                                ((round(start[0], 4), round(start[1], 4)),
-                                                 (round(goal[0], 4), round(goal[1], 4))))
-                    new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
-                                    (inner_path[i][1] + inner_path[i+1][1])/2)
-            radius = random.uniform(radius_min, radius_max)
-
-        # Plot path and new obstacle
-        rrt.draw_graph()
-        plt.title("IRRT*")
-        if self.animate.get():
-            path_len = len(path) - 1
-            for i in range(path_len):
-                plt.plot([path[i][0], path[i+1][0]],
-                         [path[i][1], path[i+1][1]], linestyle='dashed', color='yellow')
-                plt.pause(0.1)
-        else:
-            plt.plot([x for (x, y) in self.path], [y for (x, y) in self.path], '-r')
-
-        if not bug:
-            return
-
+        radius = random.uniform(radius_min, radius_max)
         plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=10 * radius)
 
         # store all points of new obstacle diameter
@@ -277,11 +217,85 @@ class ui:
 
             degrees -= 0.5
 
+        return obstacle_x, obstacle_y
+
+
+    def irrtStarWithTangentBugStar(self, start=(0,0), create=True, bug=True):
+        """
+        Clear and set new text for a entry field
+
+        :param start                the start coordinates
+        :param create               create random obstacles and goal before running IRRT*
+        :param bug                  create a new obstacle and run bug algo
+        """
+        path = None
+
+        while path is None:
+            plt.title("Random IRRT* planning attempt")
+            if create:
+                self.obstacle_list.clear()
+                # create random obstacles
+                for n in range(obstacles):
+                    self.obstacle_list.append((random.randrange(obstacle_min, range_max),
+                                               random.randrange(obstacle_min, range_max),
+                                               random.uniform(radius_min, radius_max)))
+                # Set params
+                self.goal = [random.randrange(random.randrange(goal_min, range_max), range_max),
+                             random.randrange(random.randrange(goal_min, range_max), range_max)]
+
+            rrt = InformedRRTStar(start=start,
+                                  goal=self.goal,
+                                  obstacle_list=self.obstacle_list,
+                                  rand_area=[range_min, range_max],
+                                  expand_dis=4,
+                                  goal_sample_rate=20)
+            path = rrt.informed_rrt_star_search(animation=(self.animate.get() and
+                                                           self.animate_full.get()))
+
+        if len(path) < 10:
+            bug = False
+
+        goal = self.goal
+        path.reverse()
+        self.output_text.insert(END, "IRRT* path len = %d\n" % (len(path)))
+        if bug:
+            inner_path = path[2:5]
+            inner_len = len(inner_path) - 1
+            new_obstacle = random.choice(inner_path[:-1])
+            while new_obstacle in self.obstacle_list:
+                new_obstacle = random.choice(inner_path[:-1])
+            for i in range(inner_len):
+                if inner_path[i] == new_obstacle:
+                    start = (inner_path[i][0], inner_path[i][1])
+                    goal = (inner_path[i+1][0], inner_path[i+1][1])
+                    self.output_text.insert(END, "start = %s  goal = %s\n" % 
+                                                ((round(start[0], 4), round(start[1], 4)),
+                                                 (round(goal[0], 4), round(goal[1], 4))))
+                    new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
+                                    (inner_path[i][1] + inner_path[i+1][1])/2)
+
+        # Plot path and new obstacle
+        rrt.draw_graph()
+        plt.title("IRRT*")
+        if self.animate.get():
+            path_len = len(path) - 1
+            for i in range(path_len):
+                plt.plot([path[i][0], path[i+1][0]],
+                         [path[i][1], path[i+1][1]], linestyle='dashed', color='yellow')
+                plt.pause(0.1)
+        else:
+            plt.plot([x for (x, y) in self.path], [y for (x, y) in self.path], '-r')
+
+        if not bug:
+            return
+
+        obstacle_x, obstacle_y = self.bugCircleObstacle(new_obstacle, start, goal, path)
+
         plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='orange')
         plt.pause(0.5)
         self.output_text.insert(END, "next\n")
         
-        return x,y
+        return obstacle_x[-1], obstacle_y[-1]
 
 
 
