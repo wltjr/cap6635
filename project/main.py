@@ -164,29 +164,23 @@ class ui:
         :param start                the goal coordinates
         :param start                the current path
         """
+        plt.pause(0.1)
         radius = random.uniform(radius_min, radius_max)
         plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=10 * radius)
+        plt.pause(0.1)
 
-        # store all points of new obstacle diameter
-        degrees = 0
-        error = 0
-        obstacle_x = []
-        obstacle_y = []
+        # get all points of new circular obstacle diameter
         radius *= 3
-        while degrees <= 360:
-            x,y = Circle.coords(new_obstacle, radius, degrees)
-            obstacle_x.append(x)
-            obstacle_y.append(y - error)
-            degrees += 1
-            error = Circle.getError(error, degrees)
-        plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='purple')
+        circle = Circle(new_obstacle, radius)
+        plt.plot(circle.x, circle.y, linestyle='dashed', color='purple')
+        plt.pause(0.1)
 
         plt.title("IRRT* + Tangent Bug*")
         degrees = 180
         x = 0
         y = 0
-        obstacle_x.clear()
-        obstacle_y.clear()
+        obstacle_x = []
+        obstacle_y = []
         radius += int(self.collision_size.get())
         plot = False
         goal_dist = math.dist(self.goal, path[-1])
