@@ -5,7 +5,7 @@ Random Informed RRT* path planning with random new obstacle
 
 from informed_rrt_star import InformedRRTStar
 from shapes import Circle
-from tkinter import Button, Checkbutton, Entry, Frame, IntVar, Label, LEFT, RIGHT, TOP, X
+from tkinter import Button, Checkbutton, Entry, END, Frame, IntVar, Label, LEFT, RIGHT, Text
 
 import math
 import matplotlib.pyplot as plt
@@ -44,8 +44,8 @@ class ui:
         canvas.pack_forget()
         navigationToolbar2Tk.pack_forget()
         # add back to root
-        navigationToolbar2Tk.pack(side=TOP, fill=X)
-        canvas.pack(side=TOP, fill=X)
+        navigationToolbar2Tk.grid(row=0, column=0, padx=5, pady=5)
+        canvas.grid(row=1, column=0, padx=5, pady=5)
 
         plt.xlim(range_min, range_max)
         plt.ylim(range_min, range_max)
@@ -54,7 +54,7 @@ class ui:
 
         # add primary frame
         frame = Frame(root)
-        frame.pack()
+        frame.grid(row=1, column=1, padx=5, pady=5)
 
         # add input form frame
         frame_input = Frame(frame)
@@ -74,17 +74,22 @@ class ui:
         self.collision_size = Entry(frame_input)
         self.collision_size.grid(row=0, column=5, padx=5, pady=5)
 
+        self.output_text = Text(frame_input, height=25, width=60)
+        self.output_text.grid(row=1, column=0, columnspan=6, padx=5, pady=5)
+
+        frame_buttons = Frame(frame)
+        frame_buttons.pack()
 
         # run button
-        btn_dijkstra = Button(root, text='Run', command=self.run)
+        btn_dijkstra = Button(frame_buttons, text='Run', command=self.run)
         btn_dijkstra.pack(side=LEFT, padx=5, pady=5)
 
         # quit button
-        btn_quit = Button(root, text='Quit', command=plt.close)
+        btn_quit = Button(frame_buttons, text='Quit', command=plt.close)
         btn_quit.pack(side=RIGHT, padx=5, pady=5)
 
         # reset button
-        btn_reset = Button(root, text='Reset', command=self.reset)
+        btn_reset = Button(frame_buttons, text='Reset', command=self.reset)
         btn_reset.pack(side=RIGHT, padx=5, pady=5)
 
         self.centerWindow()
@@ -119,6 +124,7 @@ class ui:
         plt.ylim(range_min, range_max)
         plt.grid(True)
         self.setEntry(self.collision_size, "")
+        self.output_text.delete(1.0,END)
         plt.show()
 
 
@@ -126,6 +132,8 @@ class ui:
         self.obstacle_list = []
         self.goal = []
         count = random.randrange(1, 5)
+        self.output_text.delete(1.0,END)
+        self.output_text.insert(END, "new obstacles = %d\n" % (count))
         x_y = self.irrtStarWithTangentBugStar()
         if x_y != None:
             for _ in range(count):
@@ -134,6 +142,7 @@ class ui:
                 if x_y == None:
                     return
             self.irrtStarWithTangentBugStar((x,y),False,False)
+        self.output_text.insert(END, "done\n")
 
 
     def irrtStarWithTangentBugStar(self, start=(0,0), create=True, bug=True):
@@ -173,6 +182,7 @@ class ui:
 
         goal = self.goal
         path.reverse()
+        self.output_text.insert(END, "IRRT* path len = %d\n" % (len(path)))
         if bug:
             inner_path = path[2:5]
             inner_len = len(inner_path) - 1
@@ -183,6 +193,9 @@ class ui:
                 if inner_path[i] == new_obstacle:
                     start = (inner_path[i][0], inner_path[i][1])
                     goal = (inner_path[i+1][0], inner_path[i+1][1])
+                    self.output_text.insert(END, "start = %s  goal = %s\n" % 
+                                                ((round(start[0], 4), round(start[1], 4)),
+                                                 (round(goal[0], 4), round(goal[1], 4))))
                     new_obstacle = ((inner_path[i][0] + inner_path[i+1][0])/2,
                                     (inner_path[i][1] + inner_path[i+1][1])/2)
             radius = random.uniform(radius_min, radius_max)
@@ -216,6 +229,7 @@ class ui:
             obstacle_y.append(y - error)
             degrees += 1
             error = Circle.getError(error, degrees)
+        plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='purple')
 
         plt.title("IRRT* + Tangent Bug*")
         degrees = 180
@@ -228,10 +242,15 @@ class ui:
         goal_dist = math.dist(self.goal, path[-1])
         m = round((start[1] - goal[1]) / (start[0] - goal[0]), 4)
         degrees += math.degrees(math.atan(m)) + 10
-        while degrees >= 0:
+        self.output_text.insert(END, "slope = %.4f  angle = %.2f°  degrees = %.2f°\n" %
+                                    (round(m, 4),
+                                     round(math.degrees(math.atan(m)), 2),
+                                     round(degrees, 2)))
+        while degrees >= -45:
             x,y = Circle.coords(new_obstacle, radius, degrees)
 
             if math.dist((x,y), path[-1]) < goal_dist:
+                self.output_text.insert(END, "Bug euclidean end =  %s\n" % ((round(x, 4), round(y, 4)),))
                 plt.plot(x, y, "o", color='orange')
                 obstacle_x.append(x)
                 obstacle_y.append(y)
@@ -240,8 +259,10 @@ class ui:
             if round((y - start[1]), 1) == round((m * (x - start[0])), 1):
                 plt.plot(x, y, "o", color='orange')
                 if plot:
+                    self.output_text.insert(END, "Bug end =  %s\n" % ((round(x, 4), round(y, 4)),))
                     break
                 else:
+                    self.output_text.insert(END, "Bug start = %s\n" % ((round(x, 4), round(y, 4)),))
                     plot = True
 
             if plot:
@@ -252,6 +273,7 @@ class ui:
 
         plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='orange')
         plt.pause(0.5)
+        self.output_text.insert(END, "next\n")
         
         return x,y
 
