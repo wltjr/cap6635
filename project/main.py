@@ -129,6 +129,10 @@ class ui:
 
 
     def run(self):
+        """
+        Run the general algorithm, IRRT* + Bug* with any newly added obstacles
+        with up to 5 random new obstacles
+        """
         self.obstacle_list = []
         self.goal = []
         count = random.randrange(1, 5)
@@ -142,6 +146,7 @@ class ui:
                 x_y = self.irrtStarWithTangentBugStar((x,y),False)
                 if x_y == None:
                     return
+            x,y = x_y
             self.irrtStarWithTangentBugStar((x,y),False,False)
         self.output_text.insert(END, "done\n")
 
