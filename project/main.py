@@ -134,6 +134,7 @@ class ui:
         count = random.randrange(1, 5)
         self.output_text.delete(1.0,END)
         self.output_text.insert(END, "new obstacles = %d\n" % (count))
+        count -= 1
         x_y = self.irrtStarWithTangentBugStar()
         if x_y != None:
             for _ in range(count):
