@@ -5,7 +5,8 @@ Random Informed RRT* path planning with random new obstacle
 
 from informed_rrt_star import InformedRRTStar
 from shapes import Circle
-from tkinter import Button, Checkbutton, Entry, END, Frame, IntVar, Label, LEFT, RIGHT, Text
+from tkinter import Button, Checkbutton, END, Frame, IntVar, Label, LEFT, RIGHT, Text
+from tkinter.ttk import Combobox
 
 import math
 import matplotlib.pyplot as plt
@@ -71,8 +72,11 @@ class ui:
         animate_full_chkbtn.grid(row=0, column=3, padx=5, pady=5)
 
         Label(frame_input,text="Collision Size").grid(row=0, column=4, padx=5, pady=5)
-        self.collision_size = Entry(frame_input)
+        selected_size = IntVar()
+        self.collision_size = Combobox(frame_input, textvariable=selected_size)
         self.collision_size.grid(row=0, column=5, padx=5, pady=5)
+        self.collision_size['values'] = [int(i + 1) for i in range(10)]
+        self.collision_size.set(5)
 
         self.output_text = Text(frame_input, height=25, width=60)
         self.output_text.grid(row=1, column=0, columnspan=6, padx=5, pady=5)
@@ -123,7 +127,7 @@ class ui:
         plt.xlim(range_min, range_max)
         plt.ylim(range_min, range_max)
         plt.grid(True)
-        self.setEntry(self.collision_size, "")
+        self.collision_size.set(5)
         self.output_text.delete(1.0,END)
         plt.show()
 
@@ -183,7 +187,7 @@ class ui:
         y = 0
         obstacle_x.clear()
         obstacle_y.clear()
-        radius += 5
+        radius += int(self.collision_size.get())
         plot = False
         goal_dist = math.dist(self.goal, path[-1])
         m = round((start[1] - goal[1]) / (start[0] - goal[0]), 4)
