@@ -77,16 +77,62 @@ class Circle():
         return x,y
 
 
+class Rectangle():
+    """
+    Rectangle class for creating rectangle x,y plots for collision and display
+    """
+
+    def __init__(self, center, width, length):
+        """
+        Rectangle constructor to create new instances of class/object
+
+        :param center           the center of the rectangle x,y coordinates 
+        :param width            the rectangle width
+        :param length           the rectangle length
+        """
+        self.center = center
+        self.x = []
+        self.y = []
+        self.width = width * 1.5
+        self.length = length * 1.5
+
+        half_length = length / 2 + 3
+        half_width = width / 2 + 1
+        offset_x = -half_width
+        offset_y = half_length
+        while offset_x <= half_width:
+            self.x.append(center[0] + offset_x)
+            self.y.append(center[1] + offset_y)
+            offset_x += 0.5
+        while offset_y >= -half_length:
+            self.x.append(center[0] + offset_x)
+            self.y.append(center[1] + offset_y)
+            offset_y -= 0.5
+        while offset_x >= -half_width:
+            self.x.append(center[0] + offset_x)
+            self.y.append(center[1] + offset_y)
+            offset_x -= 0.5
+        while offset_y <= half_length:
+            self.x.append(center[0] + offset_x)
+            self.y.append(center[1] + offset_y)
+            offset_y += 0.5
+
+
 def main():
     """
     Test out the circle shape, compared to a matplotlib circle marker
     """
     plt.autoscale(False)
-    plt.xlim(0,30)
-    plt.ylim(0,30)
+    plt.xlim(0,50)
+    plt.ylim(0,50)
     circle = Circle((10, 10), 5)
     plt.plot(circle.x, circle.y, "--", color="orange")
-    plt.plot(10, 10, "ob", ms=23 * circle.radius, alpha=0.5)
+    plt.plot(10, 10, "ob", ms=13 * circle.radius, alpha=0.5)
+
+    square = Rectangle((30,30), 5, 5)
+    plt.plot(square.x, square.y, "--", color="orange")
+    plt.plot(30,30, "bs", ms=10 * square.length, alpha=0.5)
+
     InformedRRTStar.plot_ellipse(x_center = (20,20), c_best=2, c_min=1, e_theta=0)
     plt.show()
 
