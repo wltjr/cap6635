@@ -4,7 +4,7 @@ Random Informed RRT* path planning with random new obstacle
 """
 
 from informed_rrt_star import InformedRRTStar
-from shapes import Circle
+from shapes import Circle, Rectangle
 from tkinter import Button, Checkbutton, END, Frame, IntVar, Label, LEFT, RIGHT, Text
 from tkinter.ttk import Combobox
 
@@ -217,6 +217,31 @@ class ui:
 
         return obstacle_x, obstacle_y
 
+    def bugSquareObstacle(self, new_obstacle, start, goal, path):
+        """
+        Run Bug 2/Tangent Bug algorithm against a square obstacle
+
+        :param start                the new obstacle coordinates, center x,y
+        :param start                the start coordinates
+        :param start                the goal coordinates
+        :param start                the current path
+        """
+        length = random.uniform(radius_min, radius_max)
+        plt.plot(new_obstacle[0], new_obstacle[1], 'bs', ms=10 * length)
+
+        # store all points of new obstacle diameter
+        length *= 3
+        square = Rectangle(new_obstacle, length, length)
+        plt.plot(square.x, square.y, linestyle='dashed', color='purple')
+
+        plt.title("IRRT* + Tangent Bug*")
+        length += int(self.collision_size.get())
+        square = Rectangle(new_obstacle, length, length)
+        obstacle_x = square.x
+        obstacle_y= square.y
+
+        return obstacle_x, obstacle_y
+
 
     def irrtStarWithTangentBugStar(self, start=(0,0), create=True, bug=True):
         """
@@ -287,7 +312,11 @@ class ui:
         if not bug:
             return
 
-        obstacle_x, obstacle_y = self.bugCircleObstacle(new_obstacle, start, goal, path)
+        shape = random.randint(0, 1)
+        if shape:
+            obstacle_x, obstacle_y = self.bugCircleObstacle(new_obstacle, start, goal, path)
+        else:
+            obstacle_x, obstacle_y = self.bugSquareObstacle(new_obstacle, start, goal, path)
 
         plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='orange')
         plt.pause(0.5)
