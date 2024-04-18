@@ -155,24 +155,33 @@ class ui:
         self.output_text.insert(END, "done\n")
 
 
-    def bugCircleObstacle(self, new_obstacle, start, goal, path):
+    def bugAroundObstacle(self, new_obstacle, start, goal, path):
         """
-        Run Bug 2/Tangent Bug algorithm against a circle obstacle
+        Run Bug 2/Tangent Bug algorithm against a random circle or rectangle obstacle
 
         :param start                the new obstacle coordinates, center x,y
         :param start                the start coordinates
         :param start                the goal coordinates
         :param start                the current path
         """
+        shape = random.randint(0, 1)
         plt.pause(0.1)
         radius = random.uniform(radius_min, radius_max)
-        plt.plot(new_obstacle[0], new_obstacle[1], 'bo', ms=10 * radius)
+        if shape:
+            marker = 'bo'
+        else:
+            marker = 'bs'
+        plt.plot(new_obstacle[0], new_obstacle[1], marker, ms=10 * radius)
         plt.pause(0.1)
 
-        # get all points of new circular obstacle diameter
+        # get all points of new obstacle diameter
         radius *= 3
-        circle = Circle(new_obstacle, radius)
-        plt.plot(circle.x, circle.y, linestyle='dashed', color='purple')
+        if shape:
+            obstacle = Circle(new_obstacle, radius)
+        else:
+            obstacle = Rectangle(new_obstacle, radius, radius)
+
+        plt.plot(obstacle.x, obstacle.y, linestyle='dashed', color='purple')
         plt.pause(0.1)
 
         plt.title("IRRT* + Tangent Bug*")
@@ -191,7 +200,10 @@ class ui:
                                      round(math.degrees(math.atan(m)), 2),
                                      round(degrees, 2)))
         while degrees >= -45:
-            x,y = Circle.coords(new_obstacle, radius, degrees)
+            if shape:
+                x,y = Circle.coords(new_obstacle, radius, degrees)
+            else:
+                x,y = Rectangle.coords(new_obstacle, radius, radius, degrees)
 
             if math.dist((x,y), path[-1]) < goal_dist:
                 self.output_text.insert(END, "Bug euclidean end =  %s\n" % ((round(x, 4), round(y, 4)),))
@@ -214,31 +226,6 @@ class ui:
                 obstacle_y.append(y)
 
             degrees -= 0.5
-
-        return obstacle_x, obstacle_y
-
-    def bugSquareObstacle(self, new_obstacle, start, goal, path):
-        """
-        Run Bug 2/Tangent Bug algorithm against a square obstacle
-
-        :param start                the new obstacle coordinates, center x,y
-        :param start                the start coordinates
-        :param start                the goal coordinates
-        :param start                the current path
-        """
-        length = random.uniform(radius_min, radius_max)
-        plt.plot(new_obstacle[0], new_obstacle[1], 'bs', ms=10 * length)
-
-        # store all points of new obstacle diameter
-        length *= 3
-        square = Rectangle(new_obstacle, length, length)
-        plt.plot(square.x, square.y, linestyle='dashed', color='purple')
-
-        plt.title("IRRT* + Tangent Bug*")
-        length += int(self.collision_size.get())
-        square = Rectangle(new_obstacle, length, length)
-        obstacle_x = square.x
-        obstacle_y= square.y
 
         return obstacle_x, obstacle_y
 
@@ -312,12 +299,7 @@ class ui:
         if not bug:
             return
 
-        shape = random.randint(0, 1)
-        if shape:
-            obstacle_x, obstacle_y = self.bugCircleObstacle(new_obstacle, start, goal, path)
-        else:
-            obstacle_x, obstacle_y = self.bugSquareObstacle(new_obstacle, start, goal, path)
-
+        obstacle_x, obstacle_y = self.bugAroundObstacle(new_obstacle, start, goal, path)
         plt.plot(obstacle_x, obstacle_y, linestyle='dashed', color='orange')
         plt.pause(0.5)
         self.output_text.insert(END, "next\n")
