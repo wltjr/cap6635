@@ -96,26 +96,37 @@ class Rectangle():
         self.width = width * 1.5
         self.length = length * 1.5
 
-        half_length = length / 2 + 3
-        half_width = width / 2 + 1
-        offset_x = -half_width
-        offset_y = half_length
-        while offset_x <= half_width:
-            self.x.append(center[0] + offset_x)
-            self.y.append(center[1] + offset_y)
-            offset_x += 0.5
-        while offset_y >= -half_length:
-            self.x.append(center[0] + offset_x)
-            self.y.append(center[1] + offset_y)
-            offset_y -= 0.5
-        while offset_x >= -half_width:
-            self.x.append(center[0] + offset_x)
-            self.y.append(center[1] + offset_y)
-            offset_x -= 0.5
-        while offset_y <= half_length:
-            self.x.append(center[0] + offset_x)
-            self.y.append(center[1] + offset_y)
-            offset_y += 0.5
+        for degree in range(360):
+            x_, y_ = Rectangle.coords(center ,self.width, self.length, degree)
+            self.x.append(x_)
+            self.y.append(y_)
+
+    def coords(center, width, length, degrees):
+        """
+        Get the x,y coordinates of a point on a rectangle
+
+        :param center           the center of the rectangle x,y coordinates 
+        :param width            the rectangle width
+        :param length           the rectangle length
+        :param degrees          the current degrees
+
+        :return x,y             the x,y coordinate tuple
+        """
+        x = []
+        y = []
+        radius = max(width, length)
+        angle = degrees * ( math.pi / 180 )
+        x_cos = math.cos(angle)
+        y_sin = math.sin(angle)
+        dist = max(abs(x_cos), abs(y_sin))
+        x = center[0] + radius * x_cos / dist
+        if degrees >= 90 and degrees < 270:
+            x += 2
+        else:
+            x -= 2
+        y = center[1] + radius * y_sin / dist
+
+        return x,y
 
 
 def main():
