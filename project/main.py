@@ -45,7 +45,7 @@ class ui:
         canvas.pack_forget()
         navigationToolbar2Tk.pack_forget()
         # add back to root
-        navigationToolbar2Tk.grid(row=0, column=0, padx=5, pady=5)
+        navigationToolbar2Tk.grid(row=0, column=0, padx=5, pady=5, sticky='W')
         canvas.grid(row=1, column=0, padx=5, pady=5)
 
         plt.xlim(range_min, range_max)
@@ -73,13 +73,20 @@ class ui:
 
         Label(frame_input,text="Collision Size").grid(row=0, column=4, padx=5, pady=5)
         selected_size = IntVar()
-        self.collision_size = Combobox(frame_input, textvariable=selected_size)
+        self.collision_size = Combobox(frame_input, textvariable=selected_size, width=3)
         self.collision_size.grid(row=0, column=5, padx=5, pady=5)
         self.collision_size['values'] = [int(i + 1) for i in range(10)]
         self.collision_size.set(5)
 
+        Label(frame_input,text="Loops").grid(row=0, column=6, padx=5, pady=5)
+        selected_loops = IntVar()
+        self.loops = Combobox(frame_input, textvariable=selected_loops, width=3)
+        self.loops.grid(row=0, column=7, padx=5, pady=5)
+        self.loops['values'] = [int(i + 1) for i in range(10)]
+        self.loops.set(5)
+
         self.output_text = Text(frame_input, height=25, width=60)
-        self.output_text.grid(row=1, column=0, columnspan=6, padx=5, pady=5)
+        self.output_text.grid(row=1, column=0, columnspan=8, padx=5, pady=5)
 
         frame_buttons = Frame(frame)
         frame_buttons.pack()
@@ -128,6 +135,7 @@ class ui:
         plt.ylim(range_min, range_max)
         plt.grid(True)
         self.collision_size.set(5)
+        self.loops.set(5)
         self.output_text.delete(1.0,END)
         plt.show()
 
@@ -137,22 +145,23 @@ class ui:
         Run the general algorithm, IRRT* + Bug* with any newly added obstacles
         with up to 5 random new obstacles
         """
-        self.obstacle_list = []
-        self.goal = []
-        count = random.randrange(1, 5)
-        self.output_text.delete(1.0,END)
-        self.output_text.insert(END, "new obstacles = %d\n" % (count))
-        count -= 1
-        x_y = self.irrtStarWithTangentBugStar()
-        if x_y != None:
-            for _ in range(count):
+        for _ in range(int(self.loops.get())):
+            self.obstacle_list = []
+            self.goal = []
+            count = random.randrange(1, 5)
+            self.output_text.delete(1.0,END)
+            self.output_text.insert(END, "new obstacles = %d\n" % (count))
+            count -= 1
+            x_y = self.irrtStarWithTangentBugStar()
+            if x_y != None:
+                for _ in range(count):
+                    x,y = x_y
+                    x_y = self.irrtStarWithTangentBugStar((x,y),False)
+                    if x_y == None:
+                        return
                 x,y = x_y
-                x_y = self.irrtStarWithTangentBugStar((x,y),False)
-                if x_y == None:
-                    return
-            x,y = x_y
-            self.irrtStarWithTangentBugStar((x,y),False,False)
-        self.output_text.insert(END, "done\n")
+                self.irrtStarWithTangentBugStar((x,y),False,False)
+            self.output_text.insert(END, "done\n")
 
 
     def bugAroundObstacle(self, new_obstacle, start, goal, path):
