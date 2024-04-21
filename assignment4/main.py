@@ -48,7 +48,7 @@ def plotBar(data, index, x):
 def getMinMaxAvg(data, index):
     min_ = min(data, key = lambda a: a[index])[index]
     max_ = max(data, key = lambda a: a[index])[index]
-    avg_ = (min_ + max_) / 2
+    avg_ = sum(a[index] for a in data) / 10
 
     return min_, max_, avg_
 
