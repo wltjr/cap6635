@@ -163,7 +163,9 @@ class ui:
                     continue
                 x,y = x_y
                 self.irrtStarWithTangentBugStar((x,y),False,False)
-            self.output_text.insert(END, "done\n")
+            self.output_text.insert(END, "online done\n")
+            self.irrtStarWithTangentBugStar((0,0),False,False)
+            self.output_text.insert(END, "offline done\n")
 
 
     def bugAroundObstacle(self, new_obstacle, start, goal, path):
