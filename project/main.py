@@ -208,6 +208,7 @@ class ui:
                                     (round(m, 4),
                                      round(math.degrees(math.atan(m)), 2),
                                      round(degrees, 2)))
+        degree_change = 0
         while degrees >= -45:
             if shape:
                 x,y = Circle.coords(new_obstacle, radius, degrees)
@@ -221,7 +222,8 @@ class ui:
                 obstacle_y.append(y)
                 break
 
-            if round((y - start[1]), 1) == round((m * (x - start[0])), 1):
+            if (degree_change == 0 or degree_change - degrees > 2) and \
+               round((y - start[1]), 1) == round((m * (x - start[0])), 1):
                 plt.plot(x, y, "o", color='orange')
                 if plot:
                     self.output_text.insert(END, "Bug end =  %s\n" % ((round(x, 4), round(y, 4)),))
@@ -229,6 +231,7 @@ class ui:
                 else:
                     self.output_text.insert(END, "Bug start = %s\n" % ((round(x, 4), round(y, 4)),))
                     plot = True
+                    degree_change = degrees
 
             if plot:
                 obstacle_x.append(x)
