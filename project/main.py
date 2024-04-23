@@ -158,7 +158,9 @@ class ui:
                     x,y = x_y
                     x_y = self.irrtStarWithTangentBugStar((x,y),False)
                     if x_y == None:
-                        return
+                        break
+                if x_y == None:
+                    continue
                 x,y = x_y
                 self.irrtStarWithTangentBugStar((x,y),False,False)
             self.output_text.insert(END, "done\n")
