@@ -196,7 +196,7 @@ class ui:
         plt.pause(0.1)
 
         plt.title("IRRT* + Tangent Bug*")
-        degrees = 180
+        degrees = 225
         x = 0
         y = 0
         obstacle_x = []
@@ -239,7 +239,7 @@ class ui:
                 obstacle_x.append(x)
                 obstacle_y.append(y)
 
-            degrees -= 0.5
+            degrees -= 0.25
 
         return obstacle_x, obstacle_y
 
