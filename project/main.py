@@ -76,7 +76,7 @@ class ui:
         self.collision_size = Combobox(frame_input, textvariable=selected_size, width=3)
         self.collision_size.grid(row=0, column=5, padx=5, pady=5)
         self.collision_size['values'] = [int(i + 1) for i in range(10)]
-        self.collision_size.set(5)
+        self.collision_size.set(9)
 
         Label(frame_input,text="Loops").grid(row=0, column=6, padx=5, pady=5)
         selected_loops = IntVar()
@@ -134,7 +134,7 @@ class ui:
         plt.xlim(range_min, range_max)
         plt.ylim(range_min, range_max)
         plt.grid(True)
-        self.collision_size.set(5)
+        self.collision_size.set(9)
         self.loops.set(5)
         self.output_text.delete(1.0,END)
         plt.show()
@@ -183,6 +183,7 @@ class ui:
         else:
             marker = 'bs'
         plt.plot(new_obstacle[0], new_obstacle[1], marker, ms=10 * radius)
+        self.obstacle_list.append((new_obstacle[0], new_obstacle[1], radius))
         plt.pause(0.1)
 
         # get all points of new obstacle diameter
