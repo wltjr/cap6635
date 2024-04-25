@@ -148,6 +148,9 @@ class ui:
         for _ in range(int(self.loops.get())):
             self.obstacle_list = []
             self.goal = []
+            self.node_count = 0
+            self.path_len = 0
+            self.prev_path_len = 0
             count = random.randrange(1, 5)
             self.output_text.delete(1.0,END)
             self.output_text.insert(END, "new obstacles = %d\n" % (count))
@@ -163,9 +166,9 @@ class ui:
                     continue
                 x,y = x_y
                 self.irrtStarWithTangentBugStar((x,y),False,False)
-            self.output_text.insert(END, "online done\n")
+            self.output_text.insert(END, "online done: nodes %d\n" % (self.path_len + self.node_count))
             self.irrtStarWithTangentBugStar((0,0),False,False)
-            self.output_text.insert(END, "offline done\n")
+            self.output_text.insert(END, "offline done: nodes %d\n" % (self.path_len + self.node_count))
 
 
     def bugAroundObstacle(self, new_obstacle, start, goal, path):
@@ -284,7 +287,14 @@ class ui:
 
         goal = self.goal
         path.reverse()
-        self.output_text.insert(END, "IRRT* path len = %d\n" % (len(path)))
+        self.path_len = path_len = len(path)    
+        if start == (0,0):
+            self.node_count = 0
+        else:
+            self.node_count += abs(self.prev_path_len - path_len)
+        self.prev_path_len = path_len
+        self.output_text.insert(END, "IRRT* path nodes = %d, node count = %d\n" %
+                                (path_len, self.node_count))
         if bug:
             inner_path = path[2:5]
             inner_len = len(inner_path) - 1
