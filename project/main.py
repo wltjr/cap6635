@@ -140,6 +140,23 @@ class ui:
         plt.show()
 
 
+    def getPathCost(self, path, path_len):
+        """
+        Get the euclidean path cost
+
+        :param path         list of x,y tuples
+        :param path_len     the length of the list
+
+        :return cost        the euclidean path cost
+        """
+        path_len -= 1
+        cost = 0
+        for i in range(path):
+            cost += math.dist(path[i], path[i+1])
+
+        return cost
+
+
     def run(self):
         """
         Run the general algorithm, IRRT* + Bug* with any newly added obstacles
