@@ -166,6 +166,8 @@ class ui:
             self.obstacle_list = []
             self.goal = []
             self.node_count = 0
+            self.path = []
+            self.path_cost = 0
             self.path_len = 0
             self.prev_path_len = 0
             count = random.randrange(1, 5)
@@ -183,9 +185,13 @@ class ui:
                     continue
                 x,y = x_y
                 self.irrtStarWithTangentBugStar((x,y),False,False)
-            self.output_text.insert(END, "online done: nodes %d\n" % (self.path_len + self.node_count))
+            for i in range(self.path_len - 1):
+                self.path_cost += math.dist(self.path[i], self.path[i+1])
+            self.output_text.insert(END, "online done: nodes %d cost %d\n" %
+                                    (self.path_len + self.node_count, self.path_cost))
             self.irrtStarWithTangentBugStar((0,0),False,False)
-            self.output_text.insert(END, "offline done: nodes %d\n" % (self.path_len + self.node_count))
+            self.output_text.insert(END, "offline done: nodes %d cost %d\n" %
+                                    (self.path_len + self.node_count, self.path_cost))
 
 
     def bugAroundObstacle(self, new_obstacle, start, goal, path):
@@ -304,11 +310,21 @@ class ui:
 
         goal = self.goal
         path.reverse()
+        self.path = path
         self.path_len = path_len = len(path)    
         if start == (0,0):
+            self.path_cost = 0
             self.node_count = 0
+            if not create and not bug:
+                for i in range(self.path_len - 1):
+                    self.path_cost += math.dist(path[i], path[i+1])
+
         else:
-            self.node_count += abs(self.prev_path_len - path_len)
+            diff = abs(self.prev_path_len - path_len)
+            self.node_count += diff
+            for i in range(diff - 1):
+                self.path_cost += math.dist(path[i], path[i+1])
+
         self.prev_path_len = path_len
         self.output_text.insert(END, "IRRT* path nodes = %d, node count = %d\n" %
                                 (path_len, self.node_count))
