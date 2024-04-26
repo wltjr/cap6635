@@ -311,11 +311,13 @@ class ui:
         goal = self.goal
         path.reverse()
         self.path = path
-        self.path_len = path_len = len(path)    
+        self.path_len = path_len = len(path)
+        title = "Online"
         if start == (0,0):
             self.path_cost = 0
             self.node_count = 0
             if not create and not bug:
+                title = "Offline"
                 for i in range(self.path_len - 1):
                     self.path_cost += math.dist(path[i], path[i+1])
 
@@ -346,7 +348,7 @@ class ui:
 
         # Plot path and new obstacle
         rrt.draw_graph()
-        plt.title("IRRT*")
+        plt.title("%s IRRT*" % (title))
         if self.animate.get():
             path_len = len(path) - 1
             for i in range(path_len):
