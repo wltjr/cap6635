@@ -16,7 +16,7 @@ import sys
 
 matplotlib.use('TkAgg')
 
-goal_min = 10
+goal_min = 25
 
 range_min = -5
 range_max = 200
@@ -224,7 +224,7 @@ class ui:
         plt.plot(obstacle.x, obstacle.y, linestyle='dashed', color='purple')
         plt.pause(0.1)
 
-        plt.title("IRRT* + Tangent Bug*")
+        plt.title("Tangent Bug*")
         degrees = 225
         x = 0
         y = 0
