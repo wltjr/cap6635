@@ -187,11 +187,20 @@ class ui:
                 self.irrtStarWithTangentBugStar((x,y),False,False)
             for i in range(self.path_len - 1):
                 self.path_cost += math.dist(self.path[i], self.path[i+1])
+            online_cost = self.path_cost
+            online_nodes = self.path_len + self.node_count
             self.output_text.insert(END, "online done: nodes %d cost %d\n" %
-                                    (self.path_len + self.node_count, self.path_cost))
+                                    (online_nodes, online_cost))
             self.irrtStarWithTangentBugStar((0,0),False,False)
+            offline_cost = self.path_cost
+            offline_nodes = self.path_len + self.node_count
             self.output_text.insert(END, "offline done: nodes %d cost %d\n" %
-                                    (self.path_len + self.node_count, self.path_cost))
+                                    (offline_nodes, offline_cost))
+            
+            with open("data.csv", "a") as file:
+                file.write("%d,%d,%d,%d\n" %
+                           (online_nodes, online_cost, offline_nodes, offline_cost))
+                file.close()
 
 
     def bugAroundObstacle(self, new_obstacle, start, goal, path):
