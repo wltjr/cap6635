@@ -218,8 +218,10 @@ class ui:
         radius *= 3
         if shape:
             obstacle = Circle(new_obstacle, radius)
+            self.path_cost += math.pi * radius
         else:
             obstacle = Rectangle(new_obstacle, radius, radius)
+            self.path_cost += radius * 2
 
         plt.plot(obstacle.x, obstacle.y, linestyle='dashed', color='purple')
         plt.pause(0.1)
