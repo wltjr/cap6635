@@ -95,6 +95,14 @@ class ui:
         btn_dijkstra = Button(frame_buttons, text='Run', command=self.run)
         btn_dijkstra.pack(side=LEFT, padx=5, pady=5)
 
+        # pause button
+        btn_pause = Button(frame_buttons, text='Pause', command=self.pause)
+        btn_pause.pack(side=LEFT, padx=5, pady=5)
+
+        # play button
+        btn_pause = Button(frame_buttons, text='Play', command=self.play)
+        btn_pause.pack(side=LEFT, padx=5, pady=5)
+
         # quit button
         btn_quit = Button(frame_buttons, text='Quit', command=plt.close)
         btn_quit.pack(side=RIGHT, padx=5, pady=5)
@@ -106,6 +114,14 @@ class ui:
         self.centerWindow()
 
         root.mainloop()
+
+
+    def pause(self):
+        plt.pause(300)
+
+
+    def play(self):
+        plt.gcf().canvas.stop_event_loop()
 
 
     def centerWindow(self):
