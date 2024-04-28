@@ -261,10 +261,11 @@ class ui:
         plot = False
         goal_dist = math.dist(self.goal, path[-1])
         m = round((start[1] - goal[1]) / (start[0] - goal[0]), 4)
-        degrees += math.degrees(math.atan(m)) + 10
+        angle = abs(math.atan(m))
+        degrees += math.degrees(angle) + 10
         self.output_text.insert(END, "slope = %.4f  angle = %.2f°  degrees = %.2f°\n" %
                                     (round(m, 4),
-                                     round(math.degrees(math.atan(m)), 2),
+                                     round(math.degrees(angle), 2),
                                      round(degrees, 2)))
         degree_change = 0
         while degrees >= -45:
@@ -295,7 +296,7 @@ class ui:
                 obstacle_x.append(x)
                 obstacle_y.append(y)
 
-            degrees -= 0.25
+            degrees -= 0.1
 
         return obstacle_x, obstacle_y
 
