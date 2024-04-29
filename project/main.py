@@ -396,7 +396,10 @@ class ui:
         plt.pause(0.5)
         self.output_text.insert(END, "next\n")
         
-        return obstacle_x[-1], obstacle_y[-1]
+        if len(obstacle_x) == 0 and len(obstacle_y) == 0:
+            return goal
+        else:
+            return obstacle_x[-1], obstacle_y[-1]
 
 
 
