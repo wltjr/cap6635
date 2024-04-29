@@ -354,6 +354,8 @@ class ui:
         else:
             diff = abs(self.prev_path_len - path_len)
             self.node_count += diff
+            if diff > self.path_len:
+                diff = self.path_len
             for i in range(diff - 1):
                 self.path_cost += math.dist(path[i], path[i+1])
 
