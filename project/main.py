@@ -197,10 +197,9 @@ class ui:
                     x_y = self.irrtStarWithTangentBugStar((x,y),False)
                     if x_y == None:
                         break
-                if x_y == None:
-                    continue
-                x,y = x_y
-                self.irrtStarWithTangentBugStar((x,y),False,False)
+                if x_y != None:
+                    x,y = x_y
+                    self.irrtStarWithTangentBugStar((x,y),False,False)
             for i in range(self.path_len - 1):
                 self.path_cost += math.dist(self.path[i], self.path[i+1])
             online_cost = self.path_cost
