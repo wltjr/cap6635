@@ -283,7 +283,8 @@ class ui:
                 break
 
             if (degree_change == 0 or degree_change - degrees > 2) and \
-               round((y - start[1]), 1) == round((m * (x - start[0])), 1):
+               (degrees < angle or \
+               round((y - start[1]), 1) == round((m * (x - start[0])), 1)):
                 plt.plot(x, y, "o", color='orange')
                 if plot:
                     self.output_text.insert(END, "Bug end =  %s\n" % ((round(x, 4), round(y, 4)),))
