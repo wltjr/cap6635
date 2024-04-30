@@ -217,7 +217,7 @@ class ui:
                            (online_nodes, online_cost, offline_nodes, offline_cost))
                 file.close()
 
-            plt.pause(0.5)
+            plt.pause(2)
 
 
     def bugAroundObstacle(self, new_obstacle, start, goal, path):
