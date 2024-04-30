@@ -83,7 +83,7 @@ class ui:
         self.loops = Combobox(frame_input, textvariable=selected_loops, width=3)
         self.loops.grid(row=0, column=7, padx=5, pady=5)
         self.loops['values'] = [int(i + 1) for i in range(10)]
-        self.loops.set(1)
+        self.loops.set(5)
 
         self.output_text = Text(frame_input, height=25, width=60)
         self.output_text.grid(row=1, column=0, columnspan=8, padx=5, pady=5)
@@ -151,7 +151,7 @@ class ui:
         plt.ylim(range_min, range_max)
         plt.grid(True)
         self.collision_size.set(9)
-        self.loops.set(1)
+        self.loops.set(5)
         self.output_text.delete(1.0,END)
         plt.show()
 
