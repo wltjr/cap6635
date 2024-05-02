@@ -1,12 +1,29 @@
 # CAP6635: Advanced Artificial Intelligence Course Project
 
 ## About
+This project using [IRRT* from AtsushiSakai/PythonRobotics](https://github.com/AtsushiSakai/PythonRobotics/blob/master/PathPlanning/InformedRRTStar/informed_rrt_star.py) 
+along with running a custom Bug 2/Tangent Bug implementation
+to simulate going aroud unknown obstacles on a predetermined path
+in online and offline modes.
 
+In online mode, IRRT* determines the intial path, and unknown obstacles
+are placed along this path, either circular or rectangular and
+Bug 2/Tangent Bug goes around those obstacles. Bug algorithm will stop
+if a Euclidean point is encountered, otherwise it will return to the
+previously determined path. Then IRRT* is run again, and this process
+is repeated for each unknown obstacle between the start and goal. This
+process is considered online mode.
+
+After the run in online mode with unknown obstacles being placed on the
+path, IRRT* is run again from the start to the goal with all the
+unknown obstacles being known and added to the previous obstacle map.
 
 
 ## System Requirements
 The following software is required for proper operation
 
+  [Matplotlib >= 3.8.4](https://pypi.org/project/matplotlib/)  
+  [Numpy >= 1.26.4](https://pypi.org/project/numpy/)  
   [Python >= 3.9](https://www.python.org/downloads/)  
 
 ## Installation
@@ -25,3 +42,12 @@ In order to run the program navigate to `project/`
 python main.py
 ```
 When that command is run the GUI should initialize and start the program.
+
+### Running Stats
+There is an additional program for statistics, mininum, maximum,
+and average node counts and path lengths, based on some theoretical
+unit, meters or feet.
+```sh
+python stats.py
+```
+This program is depend on `data.csv` in the same directory
