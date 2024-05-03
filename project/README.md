@@ -1,12 +1,11 @@
 # CAP6635: Advanced Artificial Intelligence Course Project
 
 ## About
-This project using [IRRT* from AtsushiSakai/PythonRobotics](https://github.com/AtsushiSakai/PythonRobotics/blob/master/PathPlanning/InformedRRTStar/informed_rrt_star.py) 
-along with running a custom Bug 2/Tangent Bug implementation
-to simulate going aroud unknown obstacles on a predetermined path
-in online and offline modes.
+This project is using [IRRT* from AtsushiSakai/PythonRobotics](https://github.com/AtsushiSakai/PythonRobotics/blob/master/PathPlanning/InformedRRTStar/informed_rrt_star.py) 
+along with a custom Bug 2/Tangent Bug implementation to simulate going around
+unknown obstacles on a predetermined path in online and offline modes.
 
-In online mode, IRRT* determines the intial path, and unknown obstacles
+In online mode, IRRT* determines the initial path, and unknown obstacles
 are placed along this path, either circular or rectangular and
 Bug 2/Tangent Bug goes around those obstacles. Bug algorithm will stop
 if a Euclidean point is encountered, otherwise it will return to the
@@ -48,7 +47,7 @@ python main.py
 When that command is run the GUI should initialize and start the program.
 
 ### Running Stats
-There is an additional program for statistics, mininum, maximum,
+There is an additional program for statistics, minimum, maximum,
 and average node counts and path lengths, based on some theoretical
 unit, meters or feet.
 ```sh
