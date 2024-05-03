@@ -12,6 +12,8 @@ so any trials varied considerable in runtime, making heuristic improvements hard
 to determine if beneficial. It did seem that horizontal inversions did not improve
 results, therefore, were omitted and just kept vertical inversions.
 
+![Screenshot](https://github.com/wltjr/cap6635/assets/12835340/88903d91-c5af-45b6-b7c6-4c123e2ac24c)
+
 ## System Requirements
 The following software is required for proper operation
 
