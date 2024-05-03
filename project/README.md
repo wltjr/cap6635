@@ -18,6 +18,10 @@ After the run in online mode with unknown obstacles being placed on the
 path, IRRT* is run again from the start to the goal with all the
 unknown obstacles being known and added to the previous obstacle map.
 
+<p align="center">
+  <img alt="Animated Screenshot" src="https://github.com/wltjr/cap6635/assets/12835340/2569c722-2527-489e-bc50-a044555abf48" width=60% />
+  <img alt="Screenshot of Stats" src="https://github.com/wltjr/cap6635/blob/master/project/screenshots/stats.jpg" width=35% /> 
+</p>
 
 ## System Requirements
 The following software is required for proper operation
