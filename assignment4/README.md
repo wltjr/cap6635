@@ -15,6 +15,7 @@ Program displays the results in graphs showing accuracy, precision, and recall.
 The following software is required for proper operation
 
   [Matplotlib >= 3.8.4](https://pypi.org/project/matplotlib/)  
+  [Scikit-learn >= 1.4.2](https://pypi.org/project/scikit-learn/)  
   [Python >= 3.9](https://www.python.org/downloads/)  
 
 ## Installation
@@ -26,7 +27,7 @@ Building is not required for usage and operation of the program,
 simply run `python main.py` as instructed in the following section.
 
 ## Running
-In order to run the program navigate to `project/`
+In order to run the program navigate to `assignment4/`
 (or the directory the project was unpacked into) in a terminal and run
 
 ```sh
