@@ -5,7 +5,10 @@ Assignment 1 is a graph created from two text files, `graph.txt` and `coords.txt
 Once a graph is created, vertex/nodes can be optionally blocked, and the graph
 can be searched using A* or Dijkstra algorithms.
 
-![Screenshot of GUI](https://github.com/wltjr/cap6635/assets/12835340/f783c99a-2563-40e5-8112-3fdc348aed39)
+<p align="center">
+  <img alt="Screenshot of GUI" src="https://github.com/wltjr/cap6635/assets/12835340/f783c99a-2563-40e5-8112-3fdc348aed39" width=45% />
+  <img alt="Screenshot of GUI" src="https://github.com/wltjr/cap6635/assets/12835340/2072e8ac-48ab-427b-a8ad-04ff3738410c" width=45% /> 
+</p>
 
 ## System Requirements
 The following software is required for proper operation
